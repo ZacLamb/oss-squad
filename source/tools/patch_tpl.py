@@ -435,6 +435,43 @@ rep("d:'Defeat every elite in all 3 flavors (Swift, Bulwark, Volatile)'","d:'Def
 rep("💨 Swift ones are fast, 🛡️ Bulwark ones are tanky, 💥 Volatile ones explode when beaten.","💨 Cardio Machines are fast, 🛡️ Heavyweights are extra tough, 💥 Hotheads blow up when beaten — step away!")
 for _o,_n in [("n:'Holy Bulwark',ico:'🛡️'","n:'Wrestling Room',ico:'🤼'"),("n:'Arcane Volley',ico:'🏹'","n:'Jacket Wrestlers',ico:'🥋'"),("n:'Deadly Duo',ico:'🗡️'","n:'Gi Specialists',ico:'🥋'"),("n:'Mana Well',ico:'💧'","n:'Red Corner',ico:'📋'"),("n:'Flank',ico:'⚔️'","n:'Wrestle-Jitsu',ico:'🤼'"),("n:'Choir',ico:'🎶'","n:'Strength & Conditioning',ico:'🏋️'"),("n:'Wandering Band',ico:'🎻'","n:'No-Gi Athletes',ico:'🏃'"),("n:'Dark Pact',ico:'🔮'","n:'Sambo Academy',ico:'🏫'"),("n:'Dread Guard',ico:'⚰️'","n:'Takedown Academy',ico:'🏫'")]:
     rep(_o,_n)
+
+# ---------- 22. Wording pass: heroes->grapplers, monsters->rivals, gold->coins, Tower->Circuit, ⚜️->🎖️, party->crew ----------
+rep("Monsters with a coloured glow have a zone power: skeletons that rise again, toxic slimes, fire bats that explode, frost brutes that slow you, and void creatures", "Rivals with a coloured glow have a gym power: some get back up after you tap them, some leave sweaty puddles, some burst like a pre-workout overdose, some slow you down, and some blink around")
+s=s.replace("☠ CURSED","⚠️ RISKY").replace("'Cursed bargain'","'Risky bargain'").replace("Take a cursed upgrade","Take a risky upgrade").replace("Take 3 cursed upgrades in one run","Take 3 risky upgrades in one run")
+s=s.replace("e.g. my kids love the bard!","e.g. my kids love the Athlete!").replace("New: dungeon events","New: gym events").replace("✨ New relic discovered: ","✨ New champion medal: ")
+_EN=[(r'\bHEROES\b','GRAPPLERS'),(r'\bheroes\b','grapplers'),(r'\bHeroes\b','Grapplers'),(r'\bhero\b','grappler'),(r'\bHero\b','Grappler'),
+     (r'\bmonsters\b','rivals'),(r'\bMonsters\b','Rivals'),(r'\bmonster\b','rival'),(r'\bMonster\b','Rival'),
+     (r'\bgold\b','coins'),(r'\bGold Thief\b','Coin Thief'),(r'\bGOLD THIEF\b','COIN THIEF'),(r'\bTower\b','Circuit'),(r'\btower\b','circuit'),(r'\bTOWER\b','CIRCUIT'),
+     (r'\bParty Wiped\b','Crew Tapped Out'),(r'\bparty\b','crew'),(r'\bParty\b','Crew'),(r'\bslimes\b','white belts'),('⚜️','🎖️')]
+def _prose(t):
+    out=[];i=0
+    while i<len(t):
+        j=t.find('${',i)
+        seg=t[i:] if j<0 else t[i:j]
+        for a,b in _EN:
+            seg=re.sub(r'(?<![\w/:\-.#])'+a+r'(?![\w/:\-])' if a[0]=='\\' else re.escape(a),b,seg)
+        out.append(seg)
+        if j<0: break
+        d=1;k=j+2
+        while k<len(t) and d: 
+            d+= (t[k]=='{')-(t[k]=='}'); k+=1
+        out.append(t[j:k]); i=k
+    return ''.join(out)
+def _isprose(t):
+    if len(t)<6 or ' ' not in t or 'data:image' in t or 'href=' in t and 'heroes/' in t and len(t)<80: return ' ' in t and 'data:image' not in t
+    return True
+def _fixlits(src):
+    def rp(m):
+        q=m.group(1); body=m.group(2)
+        if not re.search(r'[A-Za-z]{3,} [A-Za-z]{2,}',body) and '⚜️' not in body: return m.group(0)
+        if re.match(r'^[\w$.\[\]()]+$',body): return m.group(0)
+        return q+_prose(body)+q
+    return re.sub(r"(')((?:[^'\\\n]|\\.){2,600})'|(\")((?:[^\"\\\n]|\\.){2,600})\"|(`)([^`]{2,4000})`",lambda m: rp(type('M',(),{'group':lambda self,n,_m=m:( _m.group(1) or _m.group(3) or _m.group(5)) if n==1 else ((_m.group(2) if _m.group(1) else _m.group(4) if _m.group(3) else _m.group(6)) if n==2 else _m.group(0))})()),src)
+_i=s.find('<script>',s.find('</style>'))
+s=s[:_i]+_fixlits(s[_i:])
+EN_FIX=_prose
+s=s.replace("+120 gold","+120 coins").replace("<b>🪙 Gold</b> &mdash; picked up from coins","<b>🪙 Coins</b> &mdash; picked up").replace("Gold resets each run.","Coins reset each run.").replace("<b>🏦 Banked coins</b>","<b>🏦 Mat fees</b>")
 rep('window.__dc={camp:','window.__dc={tagTeam:(e,st)=>tagTeam(e,st),beltLv:()=>beltLv(),legacyHall:b=>legacyHall(b),towerWin0:()=>towerWin0(),get MUT(){return MUT},startWave:()=>startWave(),camp:')
 open(DST + '/story/index_tpl.html', 'w').write(s)
 print('template patched', len(s)//1024, 'KB')
