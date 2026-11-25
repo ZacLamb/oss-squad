@@ -325,6 +325,14 @@ rep("const sub=u.curse?'Cursed bargain':h?`${KINDS[h.kind].name}`:'Whole Party';
 # ---------- 14. Hero frame cache must key on the actual sprite image (fixes two-image flicker) ----------
 rep("+'|'+(SET.hs||'')+'|'+k;}", "+'|'+(SET.hs||'')+'|'+k+'|'+(()=>{try{const im=HST[SET.hs]&&HST[SET.hs][h.kind];return im&&im.complete&&im.naturalWidth?(im.__oss?'o':'e')+im.naturalWidth+'.'+im.src.length:'x';}catch(e){return 'x';}})();}")
 
+
+# ---------- 15. Traps become real gym dangers (behavior unchanged) ----------
+_i=s.find('const HAZN='); _j=s.find('};',_i)+2
+s=s[:_i]+"""const HAZN={rift:['⚠️','Mat gaps','Mats split apart every few seconds. Step off before the gap opens, and watch for rivals slipping out!'],ink:['🪢','Tangled jump ropes','Loose jump ropes trip up your line and drain your OSS meter. Go around!'],shard:['🥊','Swinging heavy bags','Heavy bags wind up, then swing. Stay out of the ring when they light up!'],saw:['🏋️','Rolling weight plates','Loose plates roll back and forth across the floor. Time your path between them.'],abyss:['🌪️','Open mat chaos','At open mat, every gym hazard shows up at once.'],spike:['⚠️','Broken tatami','Cracked mat tiles flip up — the red flash is your warning. Steer around them!'],water:['💧','Spilled water','Someone knocked over the water cooler. Wading through it slows your whole line down.'],lava:['🔥','Mat burn','Rough, overheated mats burn anyone standing on them — rivals too!'],ice:['💦','Sweat slick','Fresh sweat makes your line slide much faster. Careful with the turns!'],portal:['🚪','Locker room hatches','Step on a hatch and your line pops out at its twin. Use them to escape!']};"""+s[_j:]
+for _o,_n in [("spike:'New trap: spikes'","spike:'New hazard: broken tatami'"),("water:'New: deep water slows you'","water:'New: spilled water slows you'"),("lava:'New trap: lava'","lava:'New hazard: mat burn'"),("ice:'New: slippery ice'","ice:'New: sweat slick'"),("portal:'New: portals'","portal:'New: locker room hatches'"),("ink:'New: sticky ink pools'","ink:'New: tangled jump ropes'"),("rift:'New trap: void rifts'","rift:'New hazard: mat gaps'"),("shard:'New trap: crystal pylons pulse'","shard:'New hazard: swinging heavy bags'"),("saw:'New trap: saw blades'","saw:'New hazard: rolling weight plates'"),("abyss:'New: the Abyss mixes every trap'","abyss:'New: open mat mixes every hazard'"),
+  ("(PTL()?'Lava queima!':'Lava burns!'),sub:PTL()?'Saia das poças de lava':'Steer off the glowing pools'","(PTL()?'Queimadura de tatame!':'Mat burn!'),sub:PTL()?'Saia do tatame quente':'Steer off the hot mats'")]:
+    rep(_o,_n)
+
 rep('window.__dc={pickFlagKind,', 'window.__dc={camp:()=>camp(),unlockCard:(k,d)=>unlockCard(k,d),kindPool:()=>kindPool(),hideOverlay:()=>hideOverlay(),get G(){return G},pickFlagKind,')
 open(DST + '/story/index_tpl.html', 'w').write(s)
 print('template patched', len(s)//1024, 'KB')
