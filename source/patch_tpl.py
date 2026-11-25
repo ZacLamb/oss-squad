@@ -536,6 +536,29 @@ s=re.sub(r"const ZMUS=\[.*?\n\];", """const ZMUS=[
 ];""", s, count=1, flags=re.S)
 rep("    if(Z.perc==='drum'&&i%4===0) mnote(root*.5,t,.18,'triangle',.06);",
     "    if(Z.perc==='drum'&&i%4===0) mnote(root*.5,t,.18,'triangle',.06);\n    if(Z.perc==='gym'){ const M=MUSG||AC.destination; const k=i%16; if(k===0||k===7||k===10) { tone(t,110,42,.22,'sine',.09,M); } if(k===4||k===12){ nz(t,.14,'bandpass',1800,.06,M,.8); nz(t,.05,'highpass',5000,.025,M); } if(i%2===0) nz(t,.03,'highpass',8000,(k%4===2?.02:.012),M); }")
+
+# ---------- 26. Belt outfits (black gi from Black Belt, gold gi at Red Belt) + hidden belt achievements ----------
+BELT_URL=_U.get('belt')
+if BELT_URL:
+    rep('L("'+STORY_URL+'");', 'L("'+STORY_URL+'");\nL("'+BELT_URL+'",function(){ if(window.applyOssArt) applyOssArt(); });')
+rep("try{ for(const st in HST) for(const k in A.hst) HST[st][k]=im(A.hst[k]);",
+    "try{ const bl=(typeof beltLv==='function')?beltLv():-1; const HS=(bl>=7&&A.hst_gold)?A.hst_gold:(bl>=4&&A.hst_black)?A.hst_black:A.hst; for(const st in HST) for(const k in HS) HST[st][k]=im(HS[k]);")
+rep('function beltPromo(i){','function beltPromo(i){setTimeout(()=>{try{applyOssArt();}catch(_){}},50);')
+rep("hidA=a=>{const ck=", "hidA=a=>{if(a.id.startsWith('hb_'))return !got(a); const ck=")
+rep(" {id:'w5',ico:'🏁',n:'First Stripe',d:'Reach wave 5',r:25,chk:()=>G.wave>=5},",
+    """ {id:'w5',ico:'🏁',n:'First Stripe',d:'Reach wave 5',r:25,chk:()=>G.wave>=5},
+ {id:'hb_blue',ico:'🟦',n:'Blue Belt',d:'Earn your Blue Belt in the Legacy Hall',r:100,chk:()=>beltLv()>=1},
+ {id:'hb_purple',ico:'🟪',n:'Purple Belt',d:'Earn your Purple Belt in the Legacy Hall',r:150,chk:()=>beltLv()>=2},
+ {id:'hb_brown',ico:'🟫',n:'Brown Belt',d:'Earn your Brown Belt in the Legacy Hall',r:200,chk:()=>beltLv()>=3},
+ {id:'hb_black',ico:'⬛',n:'Black Belt',d:'Earn your Black Belt. Your crew now wears black gis.',r:300,chk:()=>beltLv()>=4},
+ {id:'hb_coral',ico:'🪸',n:'Coral Belt',d:'Earn your Coral Belt',r:400,chk:()=>beltLv()>=5},
+ {id:'hb_coral2',ico:'🪸',n:'Coral Belt II',d:'Earn your second Coral Belt',r:500,chk:()=>beltLv()>=6},
+ {id:'hb_red',ico:'🟥',n:'Grand Master',d:'Earn the Red Belt. Your crew now wears gold gis.',r:1000,chk:()=>beltLv()>=7},
+ {id:'hb_founder',ico:'🥋',n:'Meet the Founder',d:'Make The Founder tap out',r:300,chk:()=>!!(META.leg&&META.leg.sec&&META.leg.sec.founder)},
+ {id:'hb_redbelt',ico:'🔴',n:'Old Master',d:'Make The Red Belt tap out',r:500,chk:()=>!!(META.leg&&META.leg.sec&&META.leg.sec.redbelt)},""")
+# ---------- 27. Last currency leftovers ("Gold" -> Coins) ----------
+for _a,_b in [('Gold resets each run','Coins reset each run'),('Gold goes straight','Coins go straight'),('Gold rains from above','Coins rain from above'),('Gold Thief','Coin Thief'),('🪙 Gold','🪙 Coins'),('spare gear for gold.','spare gear for coins.')]:
+    s=s.replace(_a,_b)
 rep('window.__dc={camp:','window.__dc={tagTeam:(e,st)=>tagTeam(e,st),beltLv:()=>beltLv(),legacyHall:b=>legacyHall(b),towerWin0:()=>towerWin0(),get MUT(){return MUT},startWave:()=>startWave(),camp:')
 open(DST + '/story/index_tpl.html', 'w').write(s)
 print('template patched', len(s)//1024, 'KB')
