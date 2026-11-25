@@ -404,6 +404,9 @@ rep('window.__dc={pickFlagKind,', 'window.__dc={camp:()=>camp(),unlockCard:(k,d)
 
 # ---------- 17. Never show the old fantasy crew: neutral fallback banner until the Oss art loads ----------
 s=re.sub(r':root\{--heroimg:url\("data:image/webp;base64,[A-Za-z0-9+/=]+"\)\}', ':root{--heroimg:radial-gradient(circle at 30% 30%,#7a3ad0 0,#2a1450 55%,#140a24 100%)}', s, count=1)
+
+# ---------- 18. Old Everlight A3 sprites (Shade/Doom Caller) must never replace the Oss rivals ----------
+rep("if(k!=='rift'){const im=new Image();im.src=cv.toDataURL('image/png');PSP[k]=[im];}","")
 rep('window.__dc={camp:','window.__dc={tagTeam:(e,st)=>tagTeam(e,st),beltLv:()=>beltLv(),legacyHall:b=>legacyHall(b),towerWin0:()=>towerWin0(),get MUT(){return MUT},startWave:()=>startWave(),camp:')
 open(DST + '/story/index_tpl.html', 'w').write(s)
 print('template patched', len(s)//1024, 'KB')

@@ -8,7 +8,7 @@
 <meta name="robots" content="noindex,nofollow">
 <script>/* CDN serves .js as text/plain+nosniff, so fetch and run instead of <script src> */
 (function(){function L(u,cb,n){n=n||0;fetch(u,{cache:"force-cache"}).then(function(r){if(!r.ok)throw 0;return r.text();}).then(function(t){try{(new Function(t))();}catch(e){} if(cb)cb();}).catch(function(){ if(n<4) setTimeout(function(){L(u,cb,n+1);},1500*(n+1)); });}
-L("https://d2ol7oe51mr4n9.cloudfront.net/user_3EmROCl8evT8aLsxpJaXd5oq6pI/c3e6cb2f-6506-45b6-9ed4-6c46de3311bc.js",function(){ if(window.ossArtReady) ossArtReady(); });
+L("https://d2ol7oe51mr4n9.cloudfront.net/user_3EmROCl8evT8aLsxpJaXd5oq6pI/44832731-3d9b-4534-8964-3d8a03e8d6e2.js",function(){ if(window.ossArtReady) ossArtReady(); });
 L("https://d2ol7oe51mr4n9.cloudfront.net/user_3EmROCl8evT8aLsxpJaXd5oq6pI/e147e406-a96d-4c27-b791-9dde83136d14.js");
 L("https://d2ol7oe51mr4n9.cloudfront.net/user_3EmROCl8evT8aLsxpJaXd5oq6pI/d70b0732-7953-4e09-a530-2e6f413f98d6.js");})();</script>
 <meta name="description" content="Oss! Squad is a free grappling party adventure: steer your crew of wrestlers, judokas and jiu-jiteros, recruit teammates, pick upgrades and free the champions from the Master Spell. Plays on phone or desktop.">
@@ -426,7 +426,7 @@ function rep(msg,src,line,col,stack){try{
   if(!/^https?:/.test(location.protocol)||/^(localhost|127\.)/.test(location.hostname))return;
   var k=msg+'|'+line;if(seen[k])return;seen[k]=1;sent++;
   var ctx={};try{var G=window.__dc&&window.__dc.G;ctx={floor:G&&G.wave,state:G&&G.state,duo:!!(G&&G.duo),w:innerWidth,h:innerHeight,dpr:devicePixelRatio,lang:(navigator.language||'').slice(0,5),app:!!(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform()),up:Math.round(performance.now()/1000)};}catch(e){}
-  var body=JSON.stringify({msg:msg.slice(0,300),src:src.replace(/[?#].*$/,'').slice(0,200),line:line||0,col:col||0,stack:st.slice(0,2000),v:"0.5.2",ctx:ctx});
+  var body=JSON.stringify({msg:msg.slice(0,300),src:src.replace(/[?#].*$/,'').slice(0,200),line:line||0,col:col||0,stack:st.slice(0,2000),v:"0.5.3",ctx:ctx});
   var u='';if(!u)return;
   if(navigator.sendBeacon&&navigator.sendBeacon(u,new Blob([body],{type:'text/plain'})))return;
   fetch(u,{method:'POST',body:body,keepalive:true,mode:'no-cors'}).catch(function(){});
@@ -534,7 +534,7 @@ function musicTick(){
     if(boss&&i%8===0) mnote(fq(0,.25),t,beat*6,'sawtooth',.03);
   }
 }
-const SET_KEY='ossSquad.settings', VERSION="0.5.2";
+const SET_KEY='ossSquad.settings', VERSION="0.5.3";
 const SET=(function(){let d={music:.8,sfx:1,shake:1,haptics:true,hd:true,hs:'chibi',ms:'chibi',ps:'chibi',df:'normal',fx:'calm'};try{Object.assign(d,JSON.parse(safeGet(SET_KEY)||'{}')||{})}catch(e){}
   if(!d.chibi1){ if(!d.hs||d.hs==='classic')d.hs='chibi'; if(!d.ms||d.ms==='painted')d.ms='chibi'; if(!d.ps||d.ps==='painted')d.ps='chibi'; d.chibi1=1; }
   try{if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches&&safeGet(SET_KEY)==null)d.shake=.3;}catch(e){} return d;})();
@@ -1823,7 +1823,7 @@ function loadEsty(src){const a=new Image();a.crossOrigin='anonymous';a.onload=()
 // Deep-floor art: Shade Stalker, Doom Caller, void rift tile.
 const A3={};
 function loadA3(src){const a=new Image();a.crossOrigin='anonymous';a.onload=()=>{try{const C=192;['shade','doomcaller','rift'].forEach((k,i)=>{const cv=document.createElement('canvas');cv.width=cv.height=C;cv.getContext('2d').drawImage(a,i*C,0,C,C,0,0,C,C);A3[k]=cv;
-  if(k!=='rift'){const im=new Image();im.src=cv.toDataURL('image/png');PSP[k]=[im];}});}catch(e){}};a.src=src||STORY_CDN+'276b16d5-baea-491b-96d0-35c239820419.webp';}
+  });}catch(e){}};a.src=src||STORY_CDN+'276b16d5-baea-491b-96d0-35c239820419.webp';}
 setTimeout(()=>{try{loadA3();}catch(e){}},100);
 // Variant monsters (Ink Wraith ... Doom Caller) drawn in the Chibi / Pixel / Vector / Vinyl styles: 4 rows x 6.
 const MVA={S:['chibi','pixel','vector','vinyl'],M:['inkwraith','shardgolem','cogknight','abyssfiend','shade','doomcaller']};
