@@ -427,6 +427,14 @@ rep("    if(A.banner) document.documentElement.style.setProperty('--heroimg','ur
 rep("else{ctx.fillStyle='#f1ead2';ctx.strokeStyle=OUT;ctx.lineWidth=.03;ctx.beginPath();ctx.moveTo(-.16,0);ctx.lineTo(.16,0);ctx.lineWidth=.07;ctx.strokeStyle='#f1ead2';ctx.stroke();ctx.fillStyle='#f1ead2';ctx.beginPath();ctx.arc(-.17,-.04,.045,0,TAU);ctx.arc(-.17,.04,.045,0,TAU);ctx.arc(.17,-.04,.045,0,TAU);ctx.arc(.17,.04,.045,0,TAU);ctx.fill();}",
     "else{ctx.scale(1.25,1.25);ctx.fillStyle='rgba(11,12,28,.35)';ctx.beginPath();ctx.ellipse(.03,.05,.2,.09,0,0,TAU);ctx.fill();ctx.fillStyle='#fbfaf4';ctx.strokeStyle='#2a2440';ctx.lineWidth=.035;ctx.beginPath();ctx.arc(0,0,.17,0,TAU);ctx.fill();ctx.stroke();ctx.strokeStyle='#d9d4c4';ctx.lineWidth=.025;ctx.beginPath();ctx.arc(0,0,.12,0,TAU);ctx.stroke();ctx.fillStyle='#b98a52';ctx.beginPath();ctx.arc(0,0,.075,0,TAU);ctx.fill();ctx.fillStyle='#3a2a1a';ctx.beginPath();ctx.arc(0,0,.04,0,TAU);ctx.fill();ctx.strokeStyle='#fbfaf4';ctx.lineWidth=.06;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(.16,.04);ctx.quadraticCurveTo(.28,.1,.34,.02);ctx.stroke();}")
 rep("text(e.x,e.y-.6,'It rises!','#f0f0e0');","text(e.x,e.y-.6,PTL()?'Levantou de novo!':'Back on their feet!','#f0f0e0');")
+
+# ---------- 21. Gym names for elite flavors and crew combos ----------
+rep("swift:{c:'#7fdcff',ico:'💨',n:'Swift'},bulwark:{c:'#d0d0e0',ico:'🛡️',n:'Bulwark'},volatile:{c:'#ff8a3a',ico:'💥',n:'Volatile'}","swift:{c:'#7fdcff',ico:'💨',n:'Cardio Machine'},bulwark:{c:'#d0d0e0',ico:'🛡️',n:'Heavyweight'},volatile:{c:'#ff8a3a',ico:'💥',n:'Hothead'}")
+rep("const AN={swift:'💨 Swift',bulwark:'🛡️ Bulwark',volatile:'💥 Volatile'};","const AN={swift:'💨 Cardio Machine',bulwark:'🛡️ Heavyweight',volatile:'💥 Hothead'};")
+rep("d:'Defeat every elite in all 3 flavors (Swift, Bulwark, Volatile)'","d:'Defeat every elite in all 3 flavors (Cardio Machine, Heavyweight, Hothead)'")
+rep("💨 Swift ones are fast, 🛡️ Bulwark ones are tanky, 💥 Volatile ones explode when beaten.","💨 Cardio Machines are fast, 🛡️ Heavyweights are extra tough, 💥 Hotheads blow up when beaten — step away!")
+for _o,_n in [("n:'Holy Bulwark',ico:'🛡️'","n:'Wrestling Room',ico:'🤼'"),("n:'Arcane Volley',ico:'🏹'","n:'Jacket Wrestlers',ico:'🥋'"),("n:'Deadly Duo',ico:'🗡️'","n:'Gi Specialists',ico:'🥋'"),("n:'Mana Well',ico:'💧'","n:'Red Corner',ico:'📋'"),("n:'Flank',ico:'⚔️'","n:'Wrestle-Jitsu',ico:'🤼'"),("n:'Choir',ico:'🎶'","n:'Strength & Conditioning',ico:'🏋️'"),("n:'Wandering Band',ico:'🎻'","n:'No-Gi Athletes',ico:'🏃'"),("n:'Dark Pact',ico:'🔮'","n:'Sambo Academy',ico:'🏫'"),("n:'Dread Guard',ico:'⚰️'","n:'Takedown Academy',ico:'🏫'")]:
+    rep(_o,_n)
 rep('window.__dc={camp:','window.__dc={tagTeam:(e,st)=>tagTeam(e,st),beltLv:()=>beltLv(),legacyHall:b=>legacyHall(b),towerWin0:()=>towerWin0(),get MUT(){return MUT},startWave:()=>startWave(),camp:')
 open(DST + '/story/index_tpl.html', 'w').write(s)
 print('template patched', len(s)//1024, 'KB')
