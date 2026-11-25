@@ -426,7 +426,7 @@ function rep(msg,src,line,col,stack){try{
   if(!/^https?:/.test(location.protocol)||/^(localhost|127\.)/.test(location.hostname))return;
   var k=msg+'|'+line;if(seen[k])return;seen[k]=1;sent++;
   var ctx={};try{var G=window.__dc&&window.__dc.G;ctx={floor:G&&G.wave,state:G&&G.state,duo:!!(G&&G.duo),w:innerWidth,h:innerHeight,dpr:devicePixelRatio,lang:(navigator.language||'').slice(0,5),app:!!(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform()),up:Math.round(performance.now()/1000)};}catch(e){}
-  var body=JSON.stringify({msg:msg.slice(0,300),src:src.replace(/[?#].*$/,'').slice(0,200),line:line||0,col:col||0,stack:st.slice(0,2000),v:"0.4.0",ctx:ctx});
+  var body=JSON.stringify({msg:msg.slice(0,300),src:src.replace(/[?#].*$/,'').slice(0,200),line:line||0,col:col||0,stack:st.slice(0,2000),v:"0.4.1",ctx:ctx});
   var u='';if(!u)return;
   if(navigator.sendBeacon&&navigator.sendBeacon(u,new Blob([body],{type:'text/plain'})))return;
   fetch(u,{method:'POST',body:body,keepalive:true,mode:'no-cors'}).catch(function(){});
@@ -534,7 +534,7 @@ function musicTick(){
     if(boss&&i%8===0) mnote(fq(0,.25),t,beat*6,'sawtooth',.03);
   }
 }
-const SET_KEY='ossSquad.settings', VERSION="0.4.0";
+const SET_KEY='ossSquad.settings', VERSION="0.4.1";
 const SET=(function(){let d={music:.8,sfx:1,shake:1,haptics:true,hd:true,hs:'chibi',ms:'chibi',ps:'chibi',df:'normal',fx:'calm'};try{Object.assign(d,JSON.parse(safeGet(SET_KEY)||'{}')||{})}catch(e){}
   if(!d.chibi1){ if(!d.hs||d.hs==='classic')d.hs='chibi'; if(!d.ms||d.ms==='painted')d.ms='chibi'; if(!d.ps||d.ps==='painted')d.ps='chibi'; d.chibi1=1; }
   try{if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches&&safeGet(SET_KEY)==null)d.shake=.3;}catch(e){} return d;})();
@@ -3566,7 +3566,7 @@ function drawHeroSprite(h){
 // Baked hero frames: each look (class + gear + style + scale) is drawn once per walk/attack pose, then stamped with drawImage.
 const HFC=new Map(),HLK=new Set(),HQ=[];let HPH_OV=null,HBAKE=0,HBF=-1;const HPB=8;
 function heroWarm(n){while(n-->0&&HQ.length){const q=HQ.shift();if(!HFC.has(q[1]+'|'+q[2]+'|'+q[3]))bakeHero(q[0],q[1],q[2],q[3],q[4],q[5],q[5]);}}
-function heroLook(h,k){const g=h.gear||{};return h.kind+'|'+(g.weapon?g.weapon.rar:-1)+','+(g.armor?g.armor.rar:-1)+','+(g.trinket?g.trinket.rar:-1)+'|'+(SET.hs||'')+'|'+k;}
+function heroLook(h,k){const g=h.gear||{};return h.kind+'|'+(g.weapon?g.weapon.rar:-1)+','+(g.armor?g.armor.rar:-1)+','+(g.trinket?g.trinket.rar:-1)+'|'+(SET.hs||'')+'|'+k+'|'+(()=>{try{const im=HST[SET.hs]&&HST[SET.hs][h.kind];return im&&im.complete&&im.naturalWidth?(im.__oss?'o':'e')+im.naturalWidth+'.'+im.src.length:'x';}catch(e){return 'x';}})();}
 function bakeHero(h,look,pb,ab,k,W,H){
   const c=document.createElement('canvas');c.width=W;c.height=H;const cx=c.getContext('2d');
   const m=ctx,t0=G.t,a0=h.atk; ctx=cx; ctx.setTransform(k,0,0,k,1.2*k,1.6*k); ctx.lineJoin='round';

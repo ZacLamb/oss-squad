@@ -321,6 +321,10 @@ rep("${u.curse?'☠ CURSED':'PARTY-WIDE'}", "${u.curse?'☠ CURSED':(PTL()?'EQUI
 rep("<b>Your Party</b>", "<b>${PTL()?'Sua Equipe':'Your Crew'}</b>")
 rep("const sub=u.curse?'Cursed bargain':h?`${KINDS[h.kind].name}`:'Whole Party';", "const sub=u.curse?'Cursed bargain':h?`${KINDS[h.kind].name}`:'Whole Crew';")
 
+
+# ---------- 14. Hero frame cache must key on the actual sprite image (fixes two-image flicker) ----------
+rep("+'|'+(SET.hs||'')+'|'+k;}", "+'|'+(SET.hs||'')+'|'+k+'|'+(()=>{try{const im=HST[SET.hs]&&HST[SET.hs][h.kind];return im&&im.complete&&im.naturalWidth?(im.__oss?'o':'e')+im.naturalWidth+'.'+im.src.length:'x';}catch(e){return 'x';}})();}")
+
 rep('window.__dc={pickFlagKind,', 'window.__dc={camp:()=>camp(),unlockCard:(k,d)=>unlockCard(k,d),kindPool:()=>kindPool(),hideOverlay:()=>hideOverlay(),get G(){return G},pickFlagKind,')
 open(DST + '/story/index_tpl.html', 'w').write(s)
 print('template patched', len(s)//1024, 'KB')
