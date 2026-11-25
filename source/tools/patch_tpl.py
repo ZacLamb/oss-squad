@@ -358,6 +358,7 @@ rep("(PTL()?'Ainda não encontrado. Aparece no andar ':'Not met yet. Shows up fr
 # sprites: per-enemy boss index for tag partners, mutant sprite in styled modes
 rep("const bk2=e.type==='boss'?'boss'+bossIdx(G.wave):''","const bk2=e.type==='boss'?'boss'+(e.bi!=null?e.bi:bossIdx(G.wave)):''")
 rep("MST[msk]['boss'+bossIdx(G.wave)]","MST[msk]['boss'+(e.bi!=null?e.bi:bossIdx(G.wave))]",count=3)
+rep("?((e.type==='boss'&&MST[msk]['boss'+(e.bi!=null","?((e.type==='boss'&&!e.mut&&MST[msk]['boss'+(e.bi!=null")
 rep(":MST[msk][e.type]):null",":((e.mut&&MST[msk][e.mut]&&MST[msk][e.mut].naturalWidth)?MST[msk][e.mut]:MST[msk][e.type])):null")
 rep("if(e.elite)sc*=1.25;","if(e.elite)sc*=1.25; if(e.tag&&!e.secret)sc*=.85;")
 rep("const bk=bossIdx(G.wave),bi=","const bk=e.bi!=null?e.bi:bossIdx(G.wave),bi=")
