@@ -280,6 +280,28 @@ rep('function applyOssArt(){ const A=window.OSS_ART; if(!A) return; const im=u=>
   try{ for(const k of KIND_LIST){ const u=A.port&&A.port['hero:'+k]; if(!u||(typeof UIC!=='undefined'&&UIC[k]&&UIC[k].__oss)) continue; const pi=new Image(); pi.onload=()=>{ try{ const c=document.createElement('canvas'); c.width=c.height=128; const x=c.getContext('2d'); x.beginPath(); x.arc(64,64,62,0,Math.PI*2); x.clip(); x.drawImage(pi,0,0,128,128); c.__oss=1; UIC[k]=c; try{UICU[k]=c.toDataURL('image/png');}catch(e){} window.__ossIcons=(window.__ossIcons||0)+1; clearTimeout(window.__ossIT); window.__ossIT=setTimeout(()=>{ try{ if(G&&G.party&&G.party.length) hud(true); }catch(e){} try{ if(document.getElementById('qstb')&&typeof menu==='function') menu(); }catch(e){} },60); }catch(e){ window.__ossIconErr=String(e); } }; pi.src=u; } }catch(e){ window.__ossIconErr=String(e); }""")
 
 rep("keys.forEach((k,i)=>{ const c=document", "keys.forEach((k,i)=>{ if(UIC[k]&&UIC[k].__oss) return; const c=document")
+
+# ---------- 10. Fixes: no hero flicker (whole-sprite animation, cached images), story slides not zoomed ----------
+rep("function applyOssArt(){ const A=window.OSS_ART; if(!A) return; const im=u=>{const i=new Image(); i.src=u; return i;};",
+    "function applyOssArt(){ const A=window.OSS_ART; if(!A) return; const IC=window.__ossImc||(window.__ossImc={}); const im=u=>IC[u]||(IC[u]=(()=>{const i=new Image(); i.__oss=1; i.src=u; return i;})());")
+rep("  if(hsx&&hsx.complete&&hsx.naturalWidth){\n    const atk=h.atk>0,ph=hph(h),k=HSZ/56,X0=-HSZ/2,Y0=-HSZ;",
+    """  if(hsx&&hsx.__oss&&hsx.complete&&hsx.naturalWidth){
+    // Oss! Squad art: one whole sprite with a smooth bob, squash and waddle (no slicing, so nothing tears)
+    const atk=h.atk>0,ph=hph(h),sn=Math.sin(ph),S=HSZ*1.08;
+    if(wc){ctx.save();ctx.globalCompositeOperation='lighter';ctx.fillStyle=rg(0,.1,0,.65,[hexA(wc,.35),hexA(wc,0)]);ctx.beginPath();ctx.arc(0,.1,.65,0,TAU);ctx.fill();ctx.restore();}
+    ctx.save(); ctx.translate(atk?.14*sw:0,.5-Math.abs(sn)*.06);
+    ctx.rotate(sn*.05+(atk?.12*sw:0)); ctx.scale(1+Math.abs(sn)*.02,1-Math.abs(sn)*.025);
+    ctx.drawImage(hsx,-S/2,-S,S,S); ctx.restore(); return;
+  }
+  if(hsx&&hsx.complete&&hsx.naturalWidth){
+    const atk=h.atk>0,ph=hph(h),k=HSZ/56,X0=-HSZ/2,Y0=-HSZ;""")
+rep("#story.txtonly .sty-bg{", """#story:not(.txtonly) .sty-img img{object-fit:contain!important;object-position:center 40%!important}
+#story:not(.txtonly) .sty-img img.kb0{animation:okb0 14s ease-out forwards!important}
+#story:not(.txtonly) .sty-img img.kb1{animation:okb1 14s ease-out forwards!important}
+@keyframes okb0{from{transform:scale(1)}to{transform:scale(1.035)}}
+@keyframes okb1{from{transform:scale(1.035)}to{transform:scale(1)}}
+#story.txtonly .sty-bg{""")
+
 rep('window.__dc={pickFlagKind,', 'window.__dc={camp:()=>camp(),unlockCard:(k,d)=>unlockCard(k,d),kindPool:()=>kindPool(),hideOverlay:()=>hideOverlay(),get G(){return G},pickFlagKind,')
 open(DST + '/story/index_tpl.html', 'w').write(s)
 print('template patched', len(s)//1024, 'KB')

@@ -8,7 +8,7 @@
 <meta name="robots" content="noindex,nofollow">
 <script>/* CDN serves .js as text/plain+nosniff, so fetch and run instead of <script src> */
 (function(){function L(u,cb){fetch(u).then(function(r){return r.text();}).then(function(t){try{(new Function(t))();}catch(e){} if(cb)cb();}).catch(function(){});}
-L("https://d2ol7oe51mr4n9.cloudfront.net/user_3EmROCl8evT8aLsxpJaXd5oq6pI/b47f28ff-b1b2-4a7e-a5f2-830f304ca1cd.js",function(){ if(window.ossArtReady) ossArtReady(); });
+L("https://d2ol7oe51mr4n9.cloudfront.net/user_3EmROCl8evT8aLsxpJaXd5oq6pI/d6e0fd04-e782-4787-b565-4b34d029f5fb.js",function(){ if(window.ossArtReady) ossArtReady(); });
 L("https://d2ol7oe51mr4n9.cloudfront.net/user_3EmROCl8evT8aLsxpJaXd5oq6pI/d98999b5-fc71-4325-b8c0-2350428fb078.js");
 L("https://d2ol7oe51mr4n9.cloudfront.net/user_3EmROCl8evT8aLsxpJaXd5oq6pI/d70b0732-7953-4e09-a530-2e6f413f98d6.js");})();</script>
 <meta name="description" content="Oss! Squad is a free grappling party adventure: steer your crew of wrestlers, judokas and jiu-jiteros, recruit teammates, pick upgrades and free the champions from the Master Spell. Plays on phone or desktop.">
@@ -382,6 +382,11 @@ body.between #hud,body.between #roster,body.between #prog,body.between .rew{disp
 </style>
 <link rel="canonical" href=""><script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "name": "Oss! Squad", "url": "", "inLanguage": ["en", "pt-BR"]}, {"@type": "VideoGame", "name": "Oss! Squad", "url": "", "image": "og.jpg", "description": "A free hero party adventure for phones, tablets and computers: steer your line of heroes, recruit allies, pick upgrades and beat 10 bosses across 50 floors to bring back the light. Narrated story, Kids Mode, no ads.", "genre": ["Roguelite", "Action", "Adventure", "Family"], "gamePlatform": ["Web browser", "iOS", "Android", "Windows", "macOS"], "applicationCategory": "GameApplication", "operatingSystem": "Any", "playMode": ["SinglePlayer", "CoOp"], "inLanguage": ["en", "pt-BR"], "isAccessibleForFree": true, "contentRating": "Everyone", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD", "availability": "https://schema.org/InStock"}}]}</script>
 <style>
+#story:not(.txtonly) .sty-img img{object-fit:contain!important;object-position:center 40%!important}
+#story:not(.txtonly) .sty-img img.kb0{animation:okb0 14s ease-out forwards!important}
+#story:not(.txtonly) .sty-img img.kb1{animation:okb1 14s ease-out forwards!important}
+@keyframes okb0{from{transform:scale(1)}to{transform:scale(1.035)}}
+@keyframes okb1{from{transform:scale(1.035)}to{transform:scale(1)}}
 #story.txtonly .sty-bg{background:radial-gradient(ellipse at 50% 30%,#3a1f5c 0%,#150c24 60%,#07040d 100%)!important;filter:none!important;opacity:1!important}
 #story.txtonly .sty-img{display:flex;align-items:center;justify-content:center}
 #story.txtonly .sty-img::after{content:var(--sty-e);font-size:min(34vw,34vh);line-height:1;filter:drop-shadow(0 0 30px #b06bff88);animation:styPulse 3s ease-in-out infinite}
@@ -421,7 +426,7 @@ function rep(msg,src,line,col,stack){try{
   if(!/^https?:/.test(location.protocol)||/^(localhost|127\.)/.test(location.hostname))return;
   var k=msg+'|'+line;if(seen[k])return;seen[k]=1;sent++;
   var ctx={};try{var G=window.__dc&&window.__dc.G;ctx={floor:G&&G.wave,state:G&&G.state,duo:!!(G&&G.duo),w:innerWidth,h:innerHeight,dpr:devicePixelRatio,lang:(navigator.language||'').slice(0,5),app:!!(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform()),up:Math.round(performance.now()/1000)};}catch(e){}
-  var body=JSON.stringify({msg:msg.slice(0,300),src:src.replace(/[?#].*$/,'').slice(0,200),line:line||0,col:col||0,stack:st.slice(0,2000),v:"0.3.1",ctx:ctx});
+  var body=JSON.stringify({msg:msg.slice(0,300),src:src.replace(/[?#].*$/,'').slice(0,200),line:line||0,col:col||0,stack:st.slice(0,2000),v:"0.3.2",ctx:ctx});
   var u='';if(!u)return;
   if(navigator.sendBeacon&&navigator.sendBeacon(u,new Blob([body],{type:'text/plain'})))return;
   fetch(u,{method:'POST',body:body,keepalive:true,mode:'no-cors'}).catch(function(){});
@@ -529,7 +534,7 @@ function musicTick(){
     if(boss&&i%8===0) mnote(fq(0,.25),t,beat*6,'sawtooth',.03);
   }
 }
-const SET_KEY='ossSquad.settings', VERSION="0.3.1";
+const SET_KEY='ossSquad.settings', VERSION="0.3.2";
 const SET=(function(){let d={music:.8,sfx:1,shake:1,haptics:true,hd:true,hs:'chibi',ms:'chibi',ps:'chibi',df:'normal',fx:'calm'};try{Object.assign(d,JSON.parse(safeGet(SET_KEY)||'{}')||{})}catch(e){}
   if(!d.chibi1){ if(!d.hs||d.hs==='classic')d.hs='chibi'; if(!d.ms||d.ms==='painted')d.ms='chibi'; if(!d.ps||d.ps==='painted')d.ps='chibi'; d.chibi1=1; }
   try{if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches&&safeGet(SET_KEY)==null)d.shake=.3;}catch(e){} return d;})();
@@ -3366,6 +3371,14 @@ function drawHeroSprite(h){
   const k=h.kind,sw=h.atk>0?Math.sin((1-h.atk/.2)*Math.PI):0,t=G.t,id=h.id;
   const gw=h.gear&&h.gear.weapon,wc=gw&&gw.rar>=1?RAR[gw.rar].c:null;
   const hsx=(SET.hs&&SET.hs!=='classic'&&HST[SET.hs])?HST[SET.hs][k]:null;
+  if(hsx&&hsx.__oss&&hsx.complete&&hsx.naturalWidth){
+    // Oss! Squad art: one whole sprite with a smooth bob, squash and waddle (no slicing, so nothing tears)
+    const atk=h.atk>0,ph=hph(h),sn=Math.sin(ph),S=HSZ*1.08;
+    if(wc){ctx.save();ctx.globalCompositeOperation='lighter';ctx.fillStyle=rg(0,.1,0,.65,[hexA(wc,.35),hexA(wc,0)]);ctx.beginPath();ctx.arc(0,.1,.65,0,TAU);ctx.fill();ctx.restore();}
+    ctx.save(); ctx.translate(atk?.14*sw:0,.5-Math.abs(sn)*.06);
+    ctx.rotate(sn*.05+(atk?.12*sw:0)); ctx.scale(1+Math.abs(sn)*.02,1-Math.abs(sn)*.025);
+    ctx.drawImage(hsx,-S/2,-S,S,S); ctx.restore(); return;
+  }
   if(hsx&&hsx.complete&&hsx.naturalWidth){
     const atk=h.atk>0,ph=hph(h),k=HSZ/56,X0=-HSZ/2,Y0=-HSZ;
     if(wc){ctx.save();ctx.globalCompositeOperation='lighter';ctx.fillStyle=rg(0,.1,0,.65,[hexA(wc,.35),hexA(wc,0)]);ctx.beginPath();ctx.arc(0,.1,.65,0,TAU);ctx.fill();ctx.restore();}
@@ -4426,7 +4439,7 @@ function frame(now){
   if(G&&G.inParty) drawPortrait();
   requestAnimationFrame(frame);
 }
-function applyOssArt(){ const A=window.OSS_ART; if(!A) return; const im=u=>{const i=new Image(); i.src=u; return i;};
+function applyOssArt(){ const A=window.OSS_ART; if(!A) return; const IC=window.__ossImc||(window.__ossImc={}); const im=u=>IC[u]||(IC[u]=(()=>{const i=new Image(); i.__oss=1; i.src=u; return i;})());
   try{ for(const k of KIND_LIST){ const u=A.port&&A.port['hero:'+k]; if(!u||(typeof UIC!=='undefined'&&UIC[k]&&UIC[k].__oss)) continue; const pi=new Image(); pi.onload=()=>{ try{ const c=document.createElement('canvas'); c.width=c.height=128; const x=c.getContext('2d'); x.beginPath(); x.arc(64,64,62,0,Math.PI*2); x.clip(); x.drawImage(pi,0,0,128,128); c.__oss=1; UIC[k]=c; try{UICU[k]=c.toDataURL('image/png');}catch(e){} window.__ossIcons=(window.__ossIcons||0)+1; clearTimeout(window.__ossIT); window.__ossIT=setTimeout(()=>{ try{ if(G&&G.party&&G.party.length) hud(true); }catch(e){} try{ if(document.getElementById('qstb')&&typeof menu==='function') menu(); }catch(e){} },60); }catch(e){ window.__ossIconErr=String(e); } }; pi.src=u; } }catch(e){ window.__ossIconErr=String(e); }
   try{ for(const st in HST) for(const k in A.hst) HST[st][k]=im(A.hst[k]);
     for(const st of ['chibi','pixel','vector','vinyl']) if(MST[st]) for(const k in A.mst){ MST[st][k]=im(A.mst[k]); }
