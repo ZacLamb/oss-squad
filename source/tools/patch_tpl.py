@@ -302,6 +302,25 @@ rep("#story.txtonly .sty-bg{", """#story:not(.txtonly) .sty-img img{object-fit:c
 @keyframes okb1{from{transform:scale(1.035)}to{transform:scale(1)}}
 #story.txtonly .sty-bg{""")
 
+
+# ---------- 11. Grappling upgrades, curses, paths, drinks, perks, gear, champion medals, combos ----------
+for _old,_new in _json.load(open(DST+'/content/upgrades.json'))['swaps']: rep(_old,_new)
+
+
+# ---------- 12. The team ultimate is "OSS!" (was NOVA) ----------
+rep("Shield Wall, Arrow Storm, Meteor Shower, Holy Light, Shadow Strike, Encore or Bone Army.", "Wrestling Room, Ippon Party, Sambo Storm, Corner Crew, Submission Hunt, Conditioning Circuit or Full Academy.")
+rep('aria-label="Party Nova"','aria-label="Team OSS"')
+rep("'PARTY NOVA!'","'TEAM OSS!'")
+s=s.replace('💥 Nova charge','💥 OSS charge')
+s=re.sub(r'NOVA(?! CLASSE)','OSS',s)
+
+
+# ---------- 13. Crew wording on upgrade/path screens ----------
+rep("b('⚔️ +'+Math.round((r.enemyM-1)*100)+'% monsters'); if(r.enemyM<1)g('🕊️ fewer monsters');", "b('⚔️ +'+Math.round((r.enemyM-1)*100)+(PTL()?'% rivais':'% rivals')); if(r.enemyM<1)g(PTL()?'🕊️ menos rivais':'🕊️ fewer rivals');")
+rep("${u.curse?'☠ CURSED':'PARTY-WIDE'}", "${u.curse?'☠ CURSED':(PTL()?'EQUIPE TODA':'WHOLE CREW')}")
+rep("<b>Your Party</b>", "<b>${PTL()?'Sua Equipe':'Your Crew'}</b>")
+rep("const sub=u.curse?'Cursed bargain':h?`${KINDS[h.kind].name}`:'Whole Party';", "const sub=u.curse?'Cursed bargain':h?`${KINDS[h.kind].name}`:'Whole Crew';")
+
 rep('window.__dc={pickFlagKind,', 'window.__dc={camp:()=>camp(),unlockCard:(k,d)=>unlockCard(k,d),kindPool:()=>kindPool(),hideOverlay:()=>hideOverlay(),get G(){return G},pickFlagKind,')
 open(DST + '/story/index_tpl.html', 'w').write(s)
 print('template patched', len(s)//1024, 'KB')
