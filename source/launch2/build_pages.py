@@ -107,13 +107,13 @@ def page(L, path, title, desc, body, alt_path=None, crumbs=None):
     t = T[L]; o = 'pt' if L == 'en' else 'en'
     altp = alt_path if alt_path is not None else path
     me = (t['pre'] + path); other = (T[o]['pre'] + altp) if not path.endswith('.html') else path
-    nav = (f'<header class="snav"><div class="sin"><a class="brand" href="{t["pre"] or "/"}{"/" if t["pre"] else ""}"><img src="/icons/icon-192.png" alt="" width="34" height="34"><span>Oss! <b>Squad</b></span></a>'
+    nav = (f'<header class="snav"><div class="sin"><a class="brand" href="{t["pre"] or "/"}{"/" if t["pre"] else ""}"><img src="https://d2ol7oe51mr4n9.cloudfront.net/user_3EmROCl8evT8aLsxpJaXd5oq6pI/04e8362a-99da-41d3-804b-62b663677540.png" alt="" width="34" height="34"><span>Oss! <b>Squad</b></span></a>'
            f'<nav class="links"><a href="{t["pre"]}/how-to-play/">{t["how"]}</a><a href="{t["pre"]}/heroes/">{t["crew"]}</a><a href="{t["pre"]}/how-to-play/#faq">{t["faq"]}</a></nav>'
            f'<div class="act"><a class="lang" href="{other}" hreflang="{t["otherl"]}">{t["other"]}</a><a class="sbtn" href="/?play">{t["play"]}</a></div></div></header>')
     cr = ''
     if crumbs:
         cr = '<nav class="crumbs" aria-label="breadcrumb">' + ' › '.join(f'<a href="{u}">{esc(n)}</a>' if u else f'<b>{esc(n)}</b>' for n, u in crumbs) + '</nav>'
-    foot = (f'<footer class="sfoot"><div class="fin"><div class="fbrand"><a class="brand" href="/"><img src="/icons/icon-192.png" alt="" width="40" height="40" loading="lazy"><span>Oss! <b>Squad</b></span></a>'
+    foot = (f'<footer class="sfoot"><div class="fin"><div class="fbrand"><a class="brand" href="/"><img src="https://d2ol7oe51mr4n9.cloudfront.net/user_3EmROCl8evT8aLsxpJaXd5oq6pI/04e8362a-99da-41d3-804b-62b663677540.png" alt="" width="40" height="40" loading="lazy"><span>Oss! <b>Squad</b></span></a>'
             f'<p>{esc(t["tag"])}</p><p class="free">{t["free"]}</p></div>'
             f'<div><h4>{t["play"][2:]}</h4><a href="/?play">{t["play"]}</a><a href="/">{t["home"]}</a></div>'
             f'<div><h4>{t["how"]}</h4><a href="{t["pre"]}/how-to-play/">{t["how"]}</a><a href="{t["pre"]}/heroes/">{t["crew"]}</a><a href="{t["pre"]}/how-to-play/#faq">{t["faq"]}</a></div>'
@@ -124,7 +124,7 @@ def page(L, path, title, desc, body, alt_path=None, crumbs=None):
             f'<link rel="canonical" href="__SITE__{me.lstrip("/")}"><link rel="alternate" hreflang="{t["lang"]}" href="__SITE__{me.lstrip("/")}"><link rel="alternate" hreflang="{T[o]["lang"]}" href="__SITE__{other.lstrip("/")}">'
             f'<meta property="og:type" content="website"><meta property="og:site_name" content="Oss! Squad"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(desc)}">'
             f'<meta property="og:image" content="{OG}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="{OG}">'
-            f'<meta name="theme-color" content="#1c1432"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">'
+            f'<meta name="theme-color" content="#1c1432"><link rel="icon" href="https://d2ol7oe51mr4n9.cloudfront.net/user_3EmROCl8evT8aLsxpJaXd5oq6pI/04e8362a-99da-41d3-804b-62b663677540.png"><link rel="apple-touch-icon" href="https://d2ol7oe51mr4n9.cloudfront.net/user_3EmROCl8evT8aLsxpJaXd5oq6pI/31326184-0326-42d9-b5de-885b589bde64.png">'
             f'<link rel="stylesheet" href="/site.css"><style>{CSS}</style></head><body>')
     return head + nav + f'<main class="pg">{cr}{body}</main>' + foot + '</body></html>'
 

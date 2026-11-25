@@ -559,6 +559,20 @@ rep(" {id:'w5',ico:'🏁',n:'First Stripe',d:'Reach wave 5',r:25,chk:()=>G.wave>
 # ---------- 27. Last currency leftovers ("Gold" -> Coins) ----------
 for _a,_b in [('Gold resets each run','Coins reset each run'),('Gold goes straight','Coins go straight'),('Gold rains from above','Coins rain from above'),('Gold Thief','Coin Thief'),('🪙 Gold','🪙 Coins'),('spare gear for gold.','spare gear for coins.')]:
     s=s.replace(_a,_b)
+# ---------- 28. Canvas text says "coins", landing link says "The crew" ----------
+rep("str=str.replace(/\\s*🪙/g,' gold');", "str=str.replace(/\\s*🪙/g,PTL()?' moedas':' coins');")
+rep("${P?'Heróis':'Heroes'}</a><button", "${P?'A equipe':'The crew'}</a><button")
+# ---------- 29. Judoka throws a spinning belt (not an arrow) ----------
+rep("""    ctx.strokeStyle='#8a5a2a';ctx.lineWidth=.05;ctx.beginPath();ctx.moveTo(-.4,0);ctx.lineTo(.1,0);ctx.stroke();
+    ctx.fillStyle='#e8f4ff';ctx.beginPath();ctx.moveTo(.22,0);ctx.lineTo(.08,-.07);ctx.lineTo(.08,.07);ctx.closePath();ctx.fill();
+    ctx.fillStyle='#7ddc6a';ctx.beginPath();ctx.moveTo(-.4,0);ctx.lineTo(-.5,-.07);ctx.lineTo(-.32,0);ctx.lineTo(-.5,.07);ctx.closePath();ctx.fill();""",
+"""    ctx.globalCompositeOperation='lighter';ctx.strokeStyle='rgba(180,255,160,.35)';ctx.lineWidth=.16;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(-.7,0);ctx.lineTo(-.15,0);ctx.stroke();ctx.globalCompositeOperation='source-over';
+    {const sp=(performance.now()/90)%TAU;ctx.save();ctx.rotate(sp);ctx.lineCap='round';ctx.strokeStyle='#1c1432';ctx.lineWidth=.13;ctx.beginPath();ctx.moveTo(-.18,-.1);ctx.quadraticCurveTo(0,.06,.18,-.1);ctx.moveTo(0,0);ctx.lineTo(-.1,.2);ctx.moveTo(0,0);ctx.lineTo(.1,.2);ctx.stroke();
+    ctx.strokeStyle='#f4f4f4';ctx.lineWidth=.08;ctx.beginPath();ctx.moveTo(-.18,-.1);ctx.quadraticCurveTo(0,.06,.18,-.1);ctx.moveTo(0,0);ctx.lineTo(-.1,.2);ctx.moveTo(0,0);ctx.lineTo(.1,.2);ctx.stroke();
+    ctx.fillStyle='#7ddc6a';ctx.beginPath();ctx.arc(0,0,.06,0,TAU);ctx.fill();ctx.restore();}""")
+rep("""ctx.globalCompositeOperation='lighter';ctx.strokeStyle='rgba(180,255,160,.4)';ctx.lineWidth=.1;ctx.beginPath();ctx.moveTo(-.9,0);ctx.lineTo(-.3,0);ctx.stroke();
+  } else if(p.kind==='dagger'""","""
+  } else if(p.kind==='dagger'""")
 rep('window.__dc={camp:','window.__dc={tagTeam:(e,st)=>tagTeam(e,st),beltLv:()=>beltLv(),legacyHall:b=>legacyHall(b),towerWin0:()=>towerWin0(),get MUT(){return MUT},startWave:()=>startWave(),camp:')
 open(DST + '/story/index_tpl.html', 'w').write(s)
 print('template patched', len(s)//1024, 'KB')
