@@ -333,6 +333,73 @@ for _o,_n in [("spike:'New trap: spikes'","spike:'New hazard: broken tatami'"),(
   ("(PTL()?'Lava queima!':'Lava burns!'),sub:PTL()?'Saia das poças de lava':'Steer off the glowing pools'","(PTL()?'Queimadura de tatame!':'Mat burn!'),sub:PTL()?'Saia do tatame quente':'Steer off the hot mats'")]:
     rep(_o,_n)
 
+
+# ---------- 16. Legacy belts (white -> red), new rivals, secret rivals, tag-team & secret bosses ----------
+_LR=_json.load(open(DST+'/content/legacy_roster.json'))
+_PSZB={'spider':[1.4,.46,0],'bat':[1.3,.4,-.15],'brute':[1.4,.5,0],'slime':[1.3,.46,0],'wizard':[1.4,.48,0],'golem':[1.5,.5,0],'charger':[1.5,.48,0],'shaman':[1.4,.48,0],'splitter':[1.4,.46,0],'ghost':[1.3,.4,-.1],'necro':[1.4,.48,0]}
+_mut=[];_psz=[];_ul=[];_na=[];_pt=[];_sec=[]
+for k,base,hp,fl,sec,ico,n,d,npt,dpt,art in _LR['rivals']:
+    _mut.append(f"{k}:{{base:'{base}',hp:{hp},col:'#c08aff',n:{_json.dumps(n)},d:{_json.dumps(d)}{',sec:1' if sec else ''}}}")
+    _psz.append(f"{k}:{_json.dumps(_PSZB[base])}")
+    if sec: _sec.append(f"['{k}',(beltLv()>=2&&w>=8)?1.3:0]")
+    else:
+        _ul.append(f"{k}:{fl}"); _na.append(f"{k}:'New rival: {n}'"); _pt.append(f"['{k}',U('{k}')?3:0]")
+for k,n,npt,art in _LR['bosses']:
+    _mut.append(f"{k}:{{base:'boss',hp:1,col:'#ff3a3a',n:{_json.dumps(n)},d:'Secret boss',boss:1,sec:1}}")
+    _psz.append(f"{k}:[1.7,.5,0]")
+rep("const MUT={","const MUT={"+",".join(_mut)+",")
+rep("boss:[1.7,.5,0]};","boss:[1.7,.5,0],"+",".join(_psz)+"};")
+rep("const UNLOCK={","const UNLOCK={"+",".join(_ul)+",")
+rep("const N={bat:'New rival: Blue Belt',","const N={"+",".join(_na)+",bat:'New rival: Blue Belt',")
+rep("const o={};for(const k in UNLOCK)o[UNLOCK[k]]=N[k];return o;","const o={};for(const k in UNLOCK){const f=UNLOCK[k];if(N[k])o[f]=o[f]?o[f]+' · '+N[k]:N[k];}return o;")
+rep("['abyssfiend',U('abyssfiend')?3:0]]","['abyssfiend',U('abyssfiend')?3:0],"+",".join(_pt+_sec)+"]")
+rep("for(const k of Object.keys(MUT)){","for(const k of Object.keys(MUT).filter(k=>!MUT[k].boss)){")
+rep("(PTL()?'Ainda não encontrado. Aparece no andar ':'Not met yet. Shows up from floor ')+UNLOCK[k]","(MUT[k].sec?(PTL()?'🔒 Rival secreto. Aparece a partir da faixa roxa no Legado.':'🔒 Secret rival. Shows up from Legacy purple belt.'):(PTL()?'Ainda não encontrado. Aparece no andar ':'Not met yet. Shows up from floor ')+UNLOCK[k])")
+# sprites: per-enemy boss index for tag partners, mutant sprite in styled modes
+rep("const bk2=e.type==='boss'?'boss'+bossIdx(G.wave):''","const bk2=e.type==='boss'?'boss'+(e.bi!=null?e.bi:bossIdx(G.wave)):''")
+rep("MST[msk]['boss'+bossIdx(G.wave)]","MST[msk]['boss'+(e.bi!=null?e.bi:bossIdx(G.wave))]",count=3)
+rep(":MST[msk][e.type]):null",":((e.mut&&MST[msk][e.mut]&&MST[msk][e.mut].naturalWidth)?MST[msk][e.mut]:MST[msk][e.type])):null")
+rep("if(e.elite)sc*=1.25;","if(e.elite)sc*=1.25; if(e.tag&&!e.secret)sc*=.85;")
+rep("const bk=bossIdx(G.wave),bi=","const bk=e.bi!=null?e.bi:bossIdx(G.wave),bi=")
+rep("const boss=G.enemies.find(e=>e.type==='boss');","const boss=G.enemies.find(e=>e.type==='boss'&&!e.tag&&!e.dead)||G.enemies.find(e=>e.type==='boss'&&!e.dead);")
+rep("drawText(BOSS_NAMES[bossIdx(G.wave)],bx+bw/2","drawText(boss.sname||BOSS_NAMES[boss.bi!=null?boss.bi:bossIdx(G.wave)],bx+bw/2")
+rep("if(e.type==='boss'&&!e.enraged&&UL('enrage',G.wave)&&e.hp<e.max*.5){","if(e.type==='boss'&&!e.tag&&!e.tag0&&beltLv()>=7){e.tag0=1;try{tagTeam(e,1);}catch(_){}} if(e.type==='boss'&&!e.tag&&!e.tagged&&e.hp<e.max*.5){e.tagged=1;try{tagTeam(e,0);}catch(_){}} if(e.type==='boss'&&!e.tag&&!e.enraged&&UL('enrage',G.wave)&&e.hp<e.max*.5){")
+rep("qEv('kill'); if(e.type==='boss'){qEv('boss');","qEv('kill'); if(e.type==='boss'&&e.tag){try{tagDown(e);}catch(_){}} else if(e.type==='boss'){try{bossLootX(e);}catch(_){} qEv('boss');")
+# belts + rewards
+rep("Object.assign({won:0,lp:0,asc:0,best:0}","Object.assign({won:0,lp:0,asc:0,best:0,belt:-1}",count=2)
+rep("const L=META.leg; L.won++; L.best=Math.max(L.best,G.wave);","const L=META.leg; const _pb=beltLv(); L.won++; L.best=Math.max(L.best,G.wave); G._promo=null; { const nb=Math.min(7,Math.max(0,L.asc)); if(nb>_pb){ L.belt=nb; G._promo=nb; } }")
+rep("const lp=10+5*L.asc; L.lp+=lp;","const lp=3*(10+5*L.asc)+(G._promo!=null?25*(G._promo+1):0); L.lp+=lp;")
+rep("const lp=Math.floor(G.wave/5)*(1+L.asc)","const lp=3*Math.floor(G.wave/5)*(1+L.asc)")
+rep("<h1>👑 EVERLIGHT RESTORED!</h1><p>You fought through all <b>${MAX_FLOOR}</b> floors, toppled the Abyss King and brought the light home.</p>","<h1>👑 ${PTL()?'TORRE CONQUISTADA!':'TOWER CONQUERED!'}</h1><p>${PTL()?'Vocês venceram os '+MAX_FLOOR+' andares e libertaram o Campeão Mascarado.':'You fought through all '+MAX_FLOOR+' floors and freed the Masked Champion.'}</p>${G._promo!=null?beltPromo(G._promo):''}")
+rep("const hpM=1+.015*META.perks.hp+.04*META.leg.perks.vit","const hpM=1+.015*META.perks.hp+.08*META.leg.perks.vit")
+rep("dmgM:1+.01*META.perks.dmg+.04*META.leg.perks.might","dmgM:1+.01*META.perks.dmg+.08*META.leg.perks.might")
+rep("(1+.05*META.leg.perks.bank)","(1+.1*META.leg.perks.bank)")
+rep("(1+.05*L.perks.bank)","(1+.1*L.perks.bank)")
+rep("+4% damage for every grappler","+8% damage for every grappler")
+rep("+4% max HP for every grappler","+8% max HP for every grappler")
+rep("+5% banked coins from every run","+10% banked coins from every run")
+rep("Earn ⚜️ every run: 1 per 5 floors (× Ascension tier), +10 for conquering the Tower.","Earn ⚜️ every run: 3 per 5 floors (× Ascension tier), +30 or more for conquering the Tower, and a big bonus for every new belt. Conquer the Tower at a higher Ascension to earn the next belt.")
+rep("bb=Math.min(.6,(boost||0)*2.5)","bb=Math.min(.6,((boost||0)+(beltLv()>=4?.12:0))*2.5)")
+rep("7+Math.min(3,(META.leg&&META.leg.perks.slots)||0)","7+Math.min(3,(META.leg&&META.leg.perks.slots)||0)+(beltLv()>=6?1:0)")
+rep("for(let i=0;i<META.perks.cache;i++) G.bag.push(rollItem(0,undefined,1)); }","for(let i=0;i<META.perks.cache;i++) G.bag.push(rollItem(0,undefined,1)); if(!G.daily){ if(beltLv()>=2) G.bag.push(rollItem(.3,undefined,2)); if(beltLv()>=4) G.bag.push(rollItem(.5,undefined,3)); } }")
+rep("META.party.forEach((k,i)=>{k=KINDS[k]?k:'knight';const ex=!G.arcade&&G.party.find(h=>h.kind===k);if(ex)starUp(ex,true);else G.party.push(mkHero(k,sx-G.party.length,sy));}); }","META.party.forEach((k,i)=>{k=KINDS[k]?k:'knight';const ex=!G.arcade&&G.party.find(h=>h.kind===k);if(ex)starUp(ex,true);else G.party.push(mkHero(k,sx-G.party.length,sy));}); if(!G.arcade&&!G.daily&&!G.duo){ const b=beltLv(); if(b>=1){ let pool=(META.unlocked||[]).filter(k=>KINDS[k]&&!G.party.some(h=>h.kind===k)); if(!pool.length) pool=KIND_LIST.filter(k=>KINDS[k]&&!G.party.some(h=>h.kind===k)); const k=pool.length?pool[Math.floor(Math.random()*pool.length)]:null; if(k) G.party.push(mkHero(k,sx-G.party.length,sy)); } if(b>=6&&G.party[0]&&(G.party[0].star||1)<2) starUp(G.party[0],true); } }")
+rep("<div class=\"shop\">${perks}</div>","${beltLadder()}<div class=\"shop\">${perks}</div>")
+rep("<h2>⚜️ Legacy Hall</h2><div class=\"bank\">${L.lp} ⚜️ points","<h2>⚜️ Legacy Hall</h2>${beltBadge()}<div class=\"bank\">${L.lp} ⚜️ points")
+_SB={k:[n,npt] for k,n,npt,art in _LR['bosses']}
+rep("const MUT={", "const SECB="+_json.dumps(_SB,ensure_ascii=False)+"; const BELTS=[['White Belt','Faixa Branca','#f4f4f4',null,'Legacy Hall opens. Legacy points ×3.','Salão do Legado aberto. Pontos de Legado ×3.'],['Blue Belt','Faixa Azul','#2f6fe0',null,'Start every run with a 4th grappler.','Comece toda corrida com um 4º lutador.'],['Purple Belt','Faixa Roxa','#8a3ad0',null,'6 secret rivals appear. Free Epic gear at the start of every run.','6 rivais secretos aparecem. Equipamento Épico grátis no início de cada corrida.'],['Brown Belt','Faixa Marrom','#7a4a22',null,'Tag-team bosses: a past champion jumps in at half health. Double boss loot.','Chefes em dupla: um campeão do passado entra na metade da vida. Saque de chefe em dobro.'],['Black Belt','Faixa Preta','#151515',null,'Better gear drops. Free Legendary gear at the start of every run.','Equipamentos melhores. Equipamento Lendário grátis no início de cada corrida.'],['Coral Belt','Faixa Coral','#151515','#d42020','Triple boss fights. Secret boss THE FOUNDER on floor 25.','Lutas triplas contra chefes. Chefe secreto O FUNDADOR no andar 25.'],['Coral Belt II','Faixa Coral II','#d42020','#f4f4f4','Start with a ★★ grappler. +1 crew slot.','Comece com um lutador ★★. +1 vaga na equipe.'],['Red Belt','Faixa Vermelha','#c81414',null,'GRAND MASTER. Tag teams from the first second of every boss fight. Secret final boss THE RED BELT on floor 50.','GRÃO-MESTRE. Duplas desde o primeiro segundo de toda luta de chefe. Chefe final secreto O FAIXA-VERMELHA no andar 50.']];\n"
+ "function beltLv(){const L=META&&META.leg;if(!L)return -1;if(L.won>0&&!(L.belt>=0))L.belt=0;return L.belt>=0?L.belt:-1;}\n"
+ "function beltSw(i,w,h){const B=BELTS[i];w=w||44;h=h||14;const bg=B[3]?`repeating-linear-gradient(90deg,${B[2]} 0 ${w/6}px,${B[3]} ${w/6}px ${w/3}px)`:B[2];return `<span style=\"display:inline-block;width:${w}px;height:${h}px;border-radius:3px;background:${bg};border:1px solid #0008;box-shadow:inset 0 -2px 0 #0003;vertical-align:middle;position:relative\"><span style=\"position:absolute;right:${w*.12}px;top:0;bottom:0;width:${w*.18}px;background:${i>=4&&i<7?'#c81414':i===7?'#111':'#111'};opacity:${i===7?.0:.85}\"></span></span>`;}\n"
+ "function beltBadge(){const b=beltLv();if(b<0)return '';const B=BELTS[b];return `<div style=\"margin:4px 0 6px;font-weight:800\">${beltSw(b,64,18)} ${PTL()?B[1]:B[0]}${b===7?(PTL()?' · GRÃO-MESTRE':' · GRAND MASTER'):''}</div>`;}\n"
+ "function beltLadder(){const b=beltLv();return '<div style=\"text-align:left;margin:6px 0 10px\"><b>'+(PTL()?'🥋 Faixas do Legado':'🥋 Legacy belts')+'</b>'+BELTS.map((B,i)=>`<div class=\"it\" style=\"opacity:${i<=b?1:.55}\"><div class=\"ic\" style=\"width:52px;display:flex;justify-content:center;align-items:center\">${beltSw(i)}</div><div class=\"tx\"><b>${i<=b?'✅ ':'🔒 '}${PTL()?B[1]:B[0]}</b><br><small>${PTL()?B[5]:B[4]}</small>${i>b?`<br><small style=\"opacity:.8\">${i===0?(PTL()?'Conquiste a Torre.':'Conquer the Tower.'):(PTL()?'Conquiste a Torre na Ascensão '+i+'.':'Conquer the Tower at Ascension '+i+'.')}</small>`:''}</div></div>`).join('')+'</div>';}\n"
+ "function beltPromo(i){const B=BELTS[i];return `<div style=\"margin:8px 0;padding:10px;border-radius:12px;background:#0006;border:2px solid ${B[3]||B[2]}\"><div style=\"font-size:22px;font-weight:900\">🥋 ${PTL()?'PROMOVIDO!':'PROMOTED!'}</div><div style=\"margin:6px 0\">${beltSw(i,90,22)}</div><b>${PTL()?B[1]:B[0]}</b><br><small>${PTL()?B[5]:B[4]}</small><br><small style=\"color:#ffd86b\">+${25*(i+1)} ⚜️ ${PTL()?'bônus de faixa':'belt bonus'}</small></div>`;}\n"
+ "function tagTeam(e,start){ if(!G||G.daily||G.tut) return; const b=beltLv(); if(b<3) return; const w=G.wave,cur=bossIdx(w); const n=start?1:(b>=5?2:1); const pool=[]; for(let i=0;i<Math.min(cur,9);i++) pool.push(i); const add=[]; if(!start&&b>=5&&w===25) add.push('founder'); if(!start&&b>=7&&w===50) add.push('redbelt'); const tgt=n+add.length; while(add.length<tgt&&pool.length) add.push(pool.splice(Math.floor(Math.random()*pool.length),1)[0]); if(!add.length) return; const nm=[];\n"
+ "  for(const a of add){ const sec=typeof a==='string'; const p=spawnEnemy(sec?a:'boss'); p.tag=1; if(sec){ p.bi=9; p.secret=a; p.sname=SECB[a][PTL()?1:0]; p.hp=p.max=e.max*.9; p.dmgS*=1.1; } else { p.bi=a; p.hp=p.max=e.max*(start?.35:.45); } p.x=clamp(e.x+rand(-2.2,2.2),.8,COLS-.8); p.y=clamp(e.y+rand(-2.2,2.2),.8,ROWS-.8); p.born=0; G.waveTotal++; G.portals.push({x:p.x,y:p.y,life:.6,max:.6,col:sec?'#ff2a2a':'#ff9a4a'}); ring(p.x,p.y,1.8,sec?'#ff2a2a':'#ff9a4a'); nm.push(sec?p.sname:BOSS_NAMES[a]); if(sec){ try{markSeen('secboss:'+a);}catch(_){} } }\n"
+ "  const _bn={text:add.some(a=>typeof a==='string')?(PTL()?'⚠️ CHEFE SECRETO!':'⚠️ SECRET BOSS!'):(PTL()?'🤼 DUPLA!':'🤼 TAG TEAM!'),sub:nm.join(' + ')+(PTL()?' entrou na luta!':' jumped in!'),t:2.8,col:'#ff6a4a'}; G.shake=1; G.flash=.4; sfx('boom'); setTimeout(()=>{ if(G&&G.state==='play') G.banner=_bn; },900); }\n"
+ "function tagDown(e){ G.score+=e.secret?5000:1500; G.pickups.push({type:'chest',x:e.x,y:e.y,t:0,item:rollItem(e.secret?.6:.35,undefined,e.secret?3:2)}); text(e.x,e.y-.8,(e.sname||BOSS_NAMES[e.bi]||'')+(PTL()?' saiu!':' tapped out!'),'#ffd86b',true); if(e.secret){ const L=META.leg; L.sec=L.sec||{}; if(!L.sec[e.secret]){ L.sec[e.secret]=1; L.lp+=50; saveMeta(); try{dtoast('🏆 '+(PTL()?'Segredo do Legado: ':'Legacy secret: ')+'<b>'+e.sname+'</b> +50 ⚜️','#ff5a5a');}catch(_){} } } }\n"
+ "function bossLootX(e){ if(beltLv()<3||G.daily) return; for(let i=0;i<2;i++) G.pickups.push({type:'chest',x:clamp(e.x+rand(-1,1),.8,COLS-.8),y:clamp(e.y+rand(-1,1),.8,ROWS-.8),t:0,item:rollItem(.3,undefined,2)}); }\n"
+ "const MUT={")
+
 rep('window.__dc={pickFlagKind,', 'window.__dc={camp:()=>camp(),unlockCard:(k,d)=>unlockCard(k,d),kindPool:()=>kindPool(),hideOverlay:()=>hideOverlay(),get G(){return G},pickFlagKind,')
+rep('window.__dc={camp:','window.__dc={tagTeam:(e,st)=>tagTeam(e,st),beltLv:()=>beltLv(),legacyHall:b=>legacyHall(b),towerWin0:()=>towerWin0(),get MUT(){return MUT},startWave:()=>startWave(),camp:')
 open(DST + '/story/index_tpl.html', 'w').write(s)
 print('template patched', len(s)//1024, 'KB')
