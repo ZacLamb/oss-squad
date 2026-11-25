@@ -34,7 +34,7 @@ function ossFinEnd(ok,already){ const F=G.fin; if(!F) return; G.fin=null; const 
 
 // ---- special-move cut-ins ----
 function ossFx(k){ return window.OSS_ART&&OSS_ART.fx&&OSS_ART.fx[k]; }
-function ossCutIn(h,SK){ const src=ossFx('sp_'+h.kind); if(!src||!G) return; const now=performance.now(); if(now-(ossCutIn.t||0)<6500) return; ossCutIn.t=now;
+function ossCutIn(h,SK){ const src=ossFx('sp_'+h.kind); if(!src||!G) return; const now=performance.now(); if(ossCutIn.t&&now-ossCutIn.t<6500) return; ossCutIn.t=now;
   let el=document.getElementById('cutIn'); if(!el){ el=document.createElement('div'); el.id='cutIn'; document.body.appendChild(el); }
   const col=KINDS[h.kind].col; el.style.setProperty('--c',col); el.innerHTML=`<img src="${src}" alt=""><div class="cn"><small>${tr(KINDS[h.kind].name)}</small><b>${SK.ico} ${tr(SK.name)}</b></div>`;
   el.className=''; void el.offsetWidth; el.className='on'; clearTimeout(ossCutIn.tm); ossCutIn.tm=setTimeout(()=>{ el.className=''; },1500); }
@@ -128,4 +128,4 @@ async function ossSfShare(btn){ const txt=ossSfText(), url=siteUrl(); const done
     const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='oss-squad-superfight.png'; a.click();
     if(navigator.clipboard) navigator.clipboard.writeText(txt+(url?'\n'+url:'')).then(()=>done(PTX('✅ Copied + saved!','✅ Copiado + salvo!')),()=>done('✅')); }catch(_){} }
 function ossSfPanel(){ if(!G||!G.daily) return ''; return `<div class="sfcard"><div class="sfl">${ossSfLine()}</div><button class="btn" id="sfShare">📣 ${PTX('Share my Superfight','Compartilhar minha Superluta')}</button></div>`; }
-window.__ossFun={ossFinCheck,ossFinTap,ossEvStart,ossGrudgeSpawn,ossDropInstr,ossGymShop,ossSfPanel,ossSfCard,ossOnKill,get G(){return G;},get META(){return META;},setATK:k=>{ATK=k;}};
+window.__ossFun={ossCutIn,ossFinCheck,ossFinTap,ossEvStart,ossGrudgeSpawn,ossDropInstr,ossGymShop,ossSfPanel,ossSfCard,ossOnKill,get G(){return G;},get META(){return META;},setATK:k=>{ATK=k;}};
