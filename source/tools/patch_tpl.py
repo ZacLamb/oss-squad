@@ -317,7 +317,7 @@ s=re.sub(r'NOVA(?! CLASSE)','OSS',s)
 
 # ---------- 13. Crew wording on upgrade/path screens ----------
 rep("b('⚔️ +'+Math.round((r.enemyM-1)*100)+'% monsters'); if(r.enemyM<1)g('🕊️ fewer monsters');", "b('⚔️ +'+Math.round((r.enemyM-1)*100)+(PTL()?'% rivais':'% rivals')); if(r.enemyM<1)g(PTL()?'🕊️ menos rivais':'🕊️ fewer rivals');")
-rep("${u.curse?'☠ CURSED':'PARTY-WIDE'}", "${u.curse?'☠ CURSED':(PTL()?'EQUIPE TODA':'WHOLE CREW')}")
+rep("${u.curse?'☠ CURSED':'PARTY-WIDE'}", "${u.curse?'☠ CURSED':(PTL()?'PARA TODOS':'CREW-WIDE')}")
 rep("<b>Your Party</b>", "<b>${PTL()?'Sua Equipe':'Your Crew'}</b>")
 rep("const sub=u.curse?'Cursed bargain':h?`${KINDS[h.kind].name}`:'Whole Party';", "const sub=u.curse?'Cursed bargain':h?`${KINDS[h.kind].name}`:'Whole Crew';")
 
