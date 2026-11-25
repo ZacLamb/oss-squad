@@ -573,6 +573,8 @@ rep("""    ctx.strokeStyle='#8a5a2a';ctx.lineWidth=.05;ctx.beginPath();ctx.moveT
 rep("""ctx.globalCompositeOperation='lighter';ctx.strokeStyle='rgba(180,255,160,.4)';ctx.lineWidth=.1;ctx.beginPath();ctx.moveTo(-.9,0);ctx.lineTo(-.3,0);ctx.stroke();
   } else if(p.kind==='dagger'""","""
   } else if(p.kind==='dagger'""")
+# ---------- 30. Champions show their parody names ("GORDO RYEMAN, THE PRESSURE KING") ----------
+rre(r"const BOSS_NAMES=\[[^\]]*\]", "const BOSS_NAMES="+__import__('json').dumps(['GORDO RYEMAN, THE PRESSURE KING', 'CRAIG BONES, THE LEGLOCK TRICKSTER', 'FYODOR EMELIANVIL, THE IRON SAMBIST', 'JORDAN BURROWSTONE, THE OLYMPIC WRESTLER', 'MARCELO GRACIAS, THE BUTTERFLY MASTER', 'ROGER GRACIOUS, THE GI GRANDMASTER', 'MIKEY MOZZARELLA, DARTH LINGUINE', 'PROFESSOR DANA-HAIR, THE RASH GUARD PROFESSOR', 'EDDIE BRAVE, THE RUBBER GUARD REBEL', 'THE MASKED CHAMPION']))
 rep('window.__dc={camp:','window.__dc={tagTeam:(e,st)=>tagTeam(e,st),beltLv:()=>beltLv(),legacyHall:b=>legacyHall(b),towerWin0:()=>towerWin0(),get MUT(){return MUT},startWave:()=>startWave(),camp:')
 open(DST + '/story/index_tpl.html', 'w').write(s)
 print('template patched', len(s)//1024, 'KB')
