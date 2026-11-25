@@ -196,7 +196,7 @@ rep('["Who dares wake the Ogre King? Hmph! Snack time!", "Quem ousa acordar o Re
 # ---------- 7. Original Oss! Squad art (Higgs), loaded from one CDN bundle ----------
 _U=_json0=__import__('json').load(open(DST+'/content/urls.json'))
 ART_URL=_U['art']; ATLAS_URL=_U['atlas']; STORY_URL=_U['story']
-rep('<meta name="robots" content="noindex,nofollow">', '<meta name="robots" content="noindex,nofollow">\n<script>/* CDN serves .js as text/plain+nosniff, so fetch and run instead of <script src> */\n(function(){function L(u,cb){fetch(u).then(function(r){return r.text();}).then(function(t){try{(new Function(t))();}catch(e){} if(cb)cb();}).catch(function(){});}\nL("'+ART_URL+'",function(){ if(window.ossArtReady) ossArtReady(); });\nL("'+ATLAS_URL+'");\nL("'+STORY_URL+'");})();</script>')
+rep('<meta name="robots" content="noindex,nofollow">', '<meta name="robots" content="noindex,nofollow">\n<script>/* CDN serves .js as text/plain+nosniff, so fetch and run instead of <script src> */\n(function(){function L(u,cb,n){n=n||0;fetch(u,{cache:"force-cache"}).then(function(r){if(!r.ok)throw 0;return r.text();}).then(function(t){try{(new Function(t))();}catch(e){} if(cb)cb();}).catch(function(){ if(n<4) setTimeout(function(){L(u,cb,n+1);},1500*(n+1)); });}\nL("'+ART_URL+'",function(){ if(window.ossArtReady) ossArtReady(); });\nL("'+ATLAS_URL+'");\nL("'+STORY_URL+'");})();</script>')
 rep("function storyUrl(k,ext){ if(window.DC_LOCAL_STORY)", "function storyUrl(k,ext){ if(ext==='webp'&&window.OSS_ART&&OSS_ART.story&&OSS_ART.story[k]) return OSS_ART.story[k]; if(window.DC_LOCAL_STORY)")
 rep('<video class="lvid" autoplay muted loop playsinline preload="metadata" poster="https://d2ol7oe51mr4n9.cloudfront.net/user_3EmROCl8evT8aLsxpJaXd5oq6pI/5c5892ef-ab39-4d2b-9b62-885c8544955b.jpg" aria-label="${P?\'Trecho do jogo\':\'Gameplay clip\'}"><source src="https://d2ol7oe51mr4n9.cloudfront.net/user_3EmROCl8evT8aLsxpJaXd5oq6pI/24779acf-ad6b-4f1e-b0d1-de87e5fef0ec.mp4" type="video/mp4"></video>',
     '<img class="lvid" id="ossBanner" ${window.OSS_ART&&OSS_ART.banner?`src="${OSS_ART.banner}"`:\'\'} alt="${P?\'A equipe\':\'The crew\'}" style="object-fit:cover;width:100%;height:100%">')
@@ -401,6 +401,9 @@ rep("const MUT={", "const SECB="+_json.dumps(_SB,ensure_ascii=False)+"; const BE
  "const MUT={")
 
 rep('window.__dc={pickFlagKind,', 'window.__dc={camp:()=>camp(),unlockCard:(k,d)=>unlockCard(k,d),kindPool:()=>kindPool(),hideOverlay:()=>hideOverlay(),get G(){return G},pickFlagKind,')
+
+# ---------- 17. Never show the old fantasy crew: neutral fallback banner until the Oss art loads ----------
+s=re.sub(r':root\{--heroimg:url\("data:image/webp;base64,[A-Za-z0-9+/=]+"\)\}', ':root{--heroimg:radial-gradient(circle at 30% 30%,#7a3ad0 0,#2a1450 55%,#140a24 100%)}', s, count=1)
 rep('window.__dc={camp:','window.__dc={tagTeam:(e,st)=>tagTeam(e,st),beltLv:()=>beltLv(),legacyHall:b=>legacyHall(b),towerWin0:()=>towerWin0(),get MUT(){return MUT},startWave:()=>startWave(),camp:')
 open(DST + '/story/index_tpl.html', 'w').write(s)
 print('template patched', len(s)//1024, 'KB')
