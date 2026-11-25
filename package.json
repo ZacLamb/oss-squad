@@ -1,6 +1,6 @@
 {
   "name": "oss-squad",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "description": "Oss! Squad (working title): jiu-jitsu conga roguelite. Hidden test build.",
   "scripts": { "start": "node server.js" },
