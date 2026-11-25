@@ -260,6 +260,25 @@ window.ossAtlasReady=function(){ const X=window.OSS_ATLAS; if(!X) return; try{ l
 if(window.OSS_ATLAS) ossAtlasReady();
 applyOssArt(); [2600,5000,9000]""")
 
+
+# ---------- 9. Polish: achievement + event names, class icons from new portraits ----------
+ACHN={'Dungeon Delver':'First Stripe','Deep Diver':'Blue Belt Energy','Abyss Walker':'Purple Belt Patience','Void Strider':'Brown Belt Grit','Dungeon Legend':'Black Belt Legend','Monster Masher':'Rival Roller','Slaughterhouse':'Open Mat Machine','Reaper':'Tap Collector','Relic Hoarder':'Medal Collector','Trap Expert':'Mat Awareness','Long Conga':'Long Conga Line','Small Band':'Small Crew','Marching Band':'Full Class','Dragon Hoard':'Gear Hoarder','Legendary Find':'Legendary Gear','Master of Arts':'Master of Moves','Champion Hunter':'Elite Hunter'}
+for a,b in ACHN.items():
+    if ("n:'"+a+"'") in s: s=s.replace("n:'"+a+"'","n:'"+b+"'")
+s=s.replace("d:'Find all 10 boss relics'","d:'Win all 10 champion medals'").replace("d:'Discover every kind of trap'","d:'Discover every kind of mat hazard'")
+s=s.replace("d:'Defeat 200 monsters in one run'","d:'Defeat 200 rivals in one run'").replace("d:'Defeat 500 monsters in one run'","d:'Defeat 500 rivals in one run'").replace("d:'Defeat 1000 monsters in one run'","d:'Defeat 1000 rivals in one run'").replace("d:'Defeat an elite of every monster type'","d:'Defeat an elite of every rival type'")
+EV=[("{id:'vents',name:'Lava Vents',ico:'🌋',desc:'Fire erupts from the floor. It burns everyone!'}","{id:'vents',name:'Mat Burns',ico:'🔥',desc:'Scorching patches flare up on the mats. They burn everyone!'}"),
+    ("{id:'moon',name:'Blood Moon',ico:'🌙',desc:'Monsters are faster but drop more loot.'}","{id:'moon',name:'Competition Day',ico:'🏟️',desc:'Rivals are faster but drop more loot.'}"),
+    ("{id:'spring',name:'Healing Spring',ico:'⛲',desc:'Touch the spring to heal the party.'}","{id:'spring',name:'Water Break',ico:'🚰',desc:'Touch the water cooler to heal the crew.'}"),
+    ("{id:'rush',name:'Gold Rush',ico:'💰',desc:'Gold rains from above. Kills pay extra.'}","{id:'rush',name:'Sponsor Day',ico:'💰',desc:'Coins rain from the stands. Wins pay extra.'}"),
+    ("{id:'hail',name:'Ice Storm',ico:'🧊',desc:'Ice shards crash down. Watch the shadows!'}","{id:'hail',name:'Ice Bath Spill',ico:'🧊',desc:'Ice chunks crash down. Watch the shadows!'}"),
+    ("{id:'rift',name:'Void Rifts',ico:'🌀',desc:'Rifts tear open and spit out Voidlings.'}","{id:'rift',name:'Spell Rifts',ico:'🌀',desc:'Rifts tear open and spit out Spell Wisps.'}")]
+for a,b in EV: rep(a,b)
+rep("dark:'New: dark floors, stay near your torch'","dark:'New: lights out, stay close to your crew'")
+rep('function applyOssArt(){ const A=window.OSS_ART; if(!A) return; const im=u=>{const i=new Image(); i.src=u; return i;};',
+    """function applyOssArt(){ const A=window.OSS_ART; if(!A) return; const im=u=>{const i=new Image(); i.src=u; return i;};
+  try{ for(const k of KIND_LIST){ const u=A.port&&A.port['hero:'+k]; if(!u||(typeof UIC!=='undefined'&&UIC[k]&&UIC[k].__oss)) continue; const pi=new Image(); pi.onload=()=>{ try{ const c=document.createElement('canvas'); c.width=c.height=128; const x=c.getContext('2d'); x.beginPath(); x.arc(64,64,62,0,Math.PI*2); x.clip(); x.drawImage(pi,0,0,128,128); c.__oss=1; UIC[k]=c; try{UICU[k]=c.toDataURL('image/png');}catch(e){} }catch(e){} }; pi.src=u; } }catch(e){}""")
+
 rep('window.__dc={pickFlagKind,', 'window.__dc={camp:()=>camp(),unlockCard:(k,d)=>unlockCard(k,d),kindPool:()=>kindPool(),hideOverlay:()=>hideOverlay(),get G(){return G},pickFlagKind,')
 open(DST + '/story/index_tpl.html', 'w').write(s)
 print('template patched', len(s)//1024, 'KB')
