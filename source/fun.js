@@ -23,13 +23,21 @@ function ossFinCheck(e){ if(!G||G.fin||G.tut||e.dead||e.type!=='boss'||e.tag||e.
   G.fin={e,t:0,dur:SET.kids?3.6:2.8,n:0,need:SET.kids?7:11,mv:PTX(mv[0],mv[1])};
   ossRef('finish'); ossCheer(1.5); buzz(30); G.flash=Math.max(G.flash||0,.2);
   let el=document.getElementById('finUI'); if(!el){ el=document.createElement('div'); el.id='finUI'; document.body.appendChild(el); }
-  el.innerHTML=`<div class="fmv">🔒 ${G.fin.mv}</div><div class="ftap">${PTX('TAP! TAP! TAP!','TOQUE! TOQUE!')}</div><div class="fbar"><i id="finFill"></i></div><div class="fhint">${PTX('Tap fast to finish!','Toque rápido para finalizar!')}</div>`; el.className='on'; }
+  const fsrc=e.secret?null:ossFx('fin_'+(e.bi!=null?e.bi:bossIdx(G.wave))); G.fin.img=fsrc;
+  el.innerHTML=`${fsrc?`<img class="fimg" src="${fsrc}" alt="">`:''}<div class="fmv">🔒 ${G.fin.mv}</div><div class="ftap">${PTX('TAP! TAP! TAP!','TOQUE! TOQUE!')}</div><div class="fbar"><i id="finFill"></i></div><div class="fhint">${PTX('Tap fast to finish!','Toque rápido para finalizar!')}</div>`; el.className='on'; }
 function ossFinTap(ev){ if(!G||!G.fin) return; if(ev&&ev.type==='keydown'&&!/^( |Enter|Space|ArrowUp|ArrowDown|ArrowLeft|ArrowRight|w|a|s|d|W|A|S|D)$/.test(ev.key)) return; if(ev&&ev.cancelable) ev.preventDefault(); if(ev) ev.stopPropagation(); G.fin.n++; buzz(8); sfx('hit'); const f=document.getElementById('finFill'); if(f) f.style.width=Math.min(100,G.fin.n/G.fin.need*100)+'%'; if(G.fin.n>=G.fin.need) ossFinEnd(true); }
 ['pointerdown','keydown'].forEach(t=>window.addEventListener(t,ev=>{ if(G&&G.fin) ossFinTap(ev); },true));
 function ossFinTick(dt){ const F=G.fin; if(!F) return; F.t+=dt; if(F.e.dead){ ossFinEnd(true,true); return; } if(F.t>=F.dur) ossFinEnd(false); }
 function ossFinEnd(ok,already){ const F=G.fin; if(!F) return; G.fin=null; const el=document.getElementById('finUI'); if(el){ el.className=''; el.innerHTML=''; } const e=F.e;
-  if(ok){ ossRef('tap'); ossCheer(3); G.banner={text:PTX('TAP OUT!','BATEU!'),sub:F.mv,t:2.4,col:'#ffd86b'}; G.score+=1500; if(!already&&!e.dead){ e.finisher=1; hurtEnemy(e,e.hp+1,true); } G.shake=Math.max(G.shake,.6); G.hs=Math.max(G.hs||0,.12); META.fins=(META.fins||0)+1; saveMeta(); }
+  if(ok){ ossRef('tap'); ossCheer(3); if(F.img){ let w=document.getElementById('finWin'); if(!w){ w=document.createElement('div'); w.id='finWin'; document.body.appendChild(w); } w.innerHTML=`<img src="${F.img}" alt=""><b>${PTX('TAP OUT!','BATEU!')}</b><small>${F.mv}</small>`; w.className=''; void w.offsetWidth; w.className='on'; setTimeout(()=>{ w.className=''; },2200); } G.banner={text:PTX('TAP OUT!','BATEU!'),sub:F.mv,t:2.4,col:'#ffd86b'}; G.score+=1500; if(!already&&!e.dead){ e.finisher=1; hurtEnemy(e,e.hp+1,true); } G.shake=Math.max(G.shake,.6); G.hs=Math.max(G.hs||0,.12); META.fins=(META.fins||0)+1; saveMeta(); }
   else { ossRef('escaped'); G.banner={text:PTX('ESCAPED!','ESCAPOU!'),sub:PTX('Wear them down and try again','Canse e tente de novo'),t:2,col:'#ff8a6a'}; e.hp=Math.min(e.max,e.hp+e.max*.08); } }
+
+// ---- special-move cut-ins ----
+function ossFx(k){ return window.OSS_ART&&OSS_ART.fx&&OSS_ART.fx[k]; }
+function ossCutIn(h,SK){ const src=ossFx('sp_'+h.kind); if(!src||!G) return; const now=performance.now(); if(now-(ossCutIn.t||0)<6500) return; ossCutIn.t=now;
+  let el=document.getElementById('cutIn'); if(!el){ el=document.createElement('div'); el.id='cutIn'; document.body.appendChild(el); }
+  const col=KINDS[h.kind].col; el.style.setProperty('--c',col); el.innerHTML=`<img src="${src}" alt=""><div class="cn"><small>${tr(KINDS[h.kind].name)}</small><b>${SK.ico} ${tr(SK.name)}</b></div>`;
+  el.className=''; void el.offsetWidth; el.className='on'; clearTimeout(ossCutIn.tm); ossCutIn.tm=setTimeout(()=>{ el.className=''; },1500); }
 
 // ---- 4. rolling combos ----
 const OSS_TD=['knight','archer','mage'];
