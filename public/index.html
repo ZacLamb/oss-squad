@@ -421,7 +421,7 @@ function rep(msg,src,line,col,stack){try{
   if(!/^https?:/.test(location.protocol)||/^(localhost|127\.)/.test(location.hostname))return;
   var k=msg+'|'+line;if(seen[k])return;seen[k]=1;sent++;
   var ctx={};try{var G=window.__dc&&window.__dc.G;ctx={floor:G&&G.wave,state:G&&G.state,duo:!!(G&&G.duo),w:innerWidth,h:innerHeight,dpr:devicePixelRatio,lang:(navigator.language||'').slice(0,5),app:!!(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform()),up:Math.round(performance.now()/1000)};}catch(e){}
-  var body=JSON.stringify({msg:msg.slice(0,300),src:src.replace(/[?#].*$/,'').slice(0,200),line:line||0,col:col||0,stack:st.slice(0,2000),v:"0.3.0",ctx:ctx});
+  var body=JSON.stringify({msg:msg.slice(0,300),src:src.replace(/[?#].*$/,'').slice(0,200),line:line||0,col:col||0,stack:st.slice(0,2000),v:"0.3.1",ctx:ctx});
   var u='';if(!u)return;
   if(navigator.sendBeacon&&navigator.sendBeacon(u,new Blob([body],{type:'text/plain'})))return;
   fetch(u,{method:'POST',body:body,keepalive:true,mode:'no-cors'}).catch(function(){});
@@ -529,7 +529,7 @@ function musicTick(){
     if(boss&&i%8===0) mnote(fq(0,.25),t,beat*6,'sawtooth',.03);
   }
 }
-const SET_KEY='ossSquad.settings', VERSION="0.3.0";
+const SET_KEY='ossSquad.settings', VERSION="0.3.1";
 const SET=(function(){let d={music:.8,sfx:1,shake:1,haptics:true,hd:true,hs:'chibi',ms:'chibi',ps:'chibi',df:'normal',fx:'calm'};try{Object.assign(d,JSON.parse(safeGet(SET_KEY)||'{}')||{})}catch(e){}
   if(!d.chibi1){ if(!d.hs||d.hs==='classic')d.hs='chibi'; if(!d.ms||d.ms==='painted')d.ms='chibi'; if(!d.ps||d.ps==='painted')d.ps='chibi'; d.chibi1=1; }
   try{if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches&&safeGet(SET_KEY)==null)d.shake=.3;}catch(e){} return d;})();
@@ -1346,7 +1346,7 @@ const UISHEETS=[[UICDN+'770decc7-dece-4268-8672-0e2a3a39da8f.webp',['knight','ar
  [UICDN+'458b67d6-a92e-4126-b4a5-4aaca0aaacd6.webp',['u_mastery','u_might','u_vigor','u_haste','u_reach','u_whirl','u_thorns','u_bulwark','u_multi','u_pierce','u_blast','u_twin','u_anthem','u_legion','u_boneward','u_encore','u_mend','u_mass','u_crit','u_flurry','u_rally','u_rations','u_iron','u_magnet','u_bounty','u_sprint','u_glass','u_blood','u_frenzy','u_greed','r_normal','r_vault','r_hunt','r_camp','r_shrine','m_key']],
  [UICDN+'2a18e8bd-9f39-4c39-815f-f22a24a12475.webp',['q_kill','q_floor','q_coin','q_banner','q_nova','q_chest','q_crate','q_elite','q_boss','q_star','q_potion','q_combo','m_trophy','m_quests','m_daily','m_arcade','m_camp','m_settings','m_help','m_codex','m_review','m_ranks','m_tag','m_kids']]];
 const UIC={},UICU={};let UIC_OK=false;
-UISHEETS.forEach(([url,keys],si)=>{ const im=new Image(); im.crossOrigin='anonymous'; im.onload=()=>{ try{ keys.forEach((k,i)=>{ const c=document.createElement('canvas'); c.width=c.height=128; c.getContext('2d').drawImage(im,i*128,0,128,128,0,0,128,128); UIC[k]=c; try{UICU[k]=c.toDataURL('image/png');}catch(e){} }); UIC_OK=true;
+UISHEETS.forEach(([url,keys],si)=>{ const im=new Image(); im.crossOrigin='anonymous'; im.onload=()=>{ try{ keys.forEach((k,i)=>{ if(UIC[k]&&UIC[k].__oss) return; const c=document.createElement('canvas'); c.width=c.height=128; c.getContext('2d').drawImage(im,i*128,0,128,128,0,0,128,128); UIC[k]=c; try{UICU[k]=c.toDataURL('image/png');}catch(e){} }); UIC_OK=true;
   try{ if(G&&G.party&&G.party.length) hud(true); }catch(e){} try{ if(document.getElementById('qstb')&&typeof menu==='function') menu(); else if(document.querySelector('#overlay .dqc')&&showQuests._a) showQuests(...showQuests._a); }catch(e){} }catch(e){} }; im.src=url; });
 function uIco(key,px,fb){ return UICU[key]?`<img src="${UICU[key]}" alt="" class="uic" style="width:${px}px;height:${px}px">`:(fb||''); }
 function kIco(kind,px){ return UICU[kind]?`<img src="${UICU[kind]}" alt="" style="width:${px}px;height:${px}px;vertical-align:middle;display:inline-block">`:KINDS[kind].ico; }

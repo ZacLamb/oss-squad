@@ -279,6 +279,7 @@ rep('function applyOssArt(){ const A=window.OSS_ART; if(!A) return; const im=u=>
     """function applyOssArt(){ const A=window.OSS_ART; if(!A) return; const im=u=>{const i=new Image(); i.src=u; return i;};
   try{ for(const k of KIND_LIST){ const u=A.port&&A.port['hero:'+k]; if(!u||(typeof UIC!=='undefined'&&UIC[k]&&UIC[k].__oss)) continue; const pi=new Image(); pi.onload=()=>{ try{ const c=document.createElement('canvas'); c.width=c.height=128; const x=c.getContext('2d'); x.beginPath(); x.arc(64,64,62,0,Math.PI*2); x.clip(); x.drawImage(pi,0,0,128,128); c.__oss=1; UIC[k]=c; try{UICU[k]=c.toDataURL('image/png');}catch(e){} }catch(e){} }; pi.src=u; } }catch(e){}""")
 
+rep("keys.forEach((k,i)=>{ const c=document", "keys.forEach((k,i)=>{ if(UIC[k]&&UIC[k].__oss) return; const c=document")
 rep('window.__dc={pickFlagKind,', 'window.__dc={camp:()=>camp(),unlockCard:(k,d)=>unlockCard(k,d),kindPool:()=>kindPool(),hideOverlay:()=>hideOverlay(),get G(){return G},pickFlagKind,')
 open(DST + '/story/index_tpl.html', 'w').write(s)
 print('template patched', len(s)//1024, 'KB')
