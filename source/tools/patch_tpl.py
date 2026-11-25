@@ -407,6 +407,21 @@ s=re.sub(r':root\{--heroimg:url\("data:image/webp;base64,[A-Za-z0-9+/=]+"\)\}', 
 
 # ---------- 18. Old Everlight A3 sprites (Shade/Doom Caller) must never replace the Oss rivals ----------
 rep("if(k!=='rift'){const im=new Image();im.src=cv.toDataURL('image/png');PSP[k]=[im];}","")
+
+# ---------- 19. New Oss icons: consumables, gear, relics, upgrades, perks, quests, menu, achievements, pickups ----------
+rep("const POT={heal:{ico:'💧',n:'Water',","const POT={heal:{ico:'🍫',n:'Protein Bar',")
+rep("dmg:{ico:'🧃',n:'Electrolytes',","dmg:{ico:'⚡',n:'Pre-Workout',")
+rep("dr:{ico:'🧊',n:'Ice Bath',","dr:{ico:'🧊',n:'Ice Pack',")
+rep("nova:{ico:'🍯',n:'Honey',","nova:{ico:'🍌',n:'Banana',")
+rep("'Drink {n} potions'","'Grab {n} gym snacks'")
+rep("'Run into crates and barrels with your leader to break them — they hide coins, potions and sometimes treasure.'","'Run into crates and barrels with your leader to break them — they hide coins, gym snacks and sometimes gear.'")
+rep("'Potions drop from crates and elites.'","'Gym snacks drop from crates and elites.'")
+rep("'Potion colours!'","'Gym snacks!'")
+rep("function gearIco(it,px,fb){px=px||30;","function gearIco(it,px,fb){px=px||30; { const _k=it?(it.rid?'rl_'+it.rid:'g_'+String(it.base||'').toLowerCase().replace(/[^a-z]+/g,'_').replace(/^_|_$/g,'')):''; if(_k&&UICU[_k]) return `<img src=\"${UICU[_k]}\" alt=\"\" style=\"width:${px}px;height:${px}px;vertical-align:middle;object-fit:contain\">`; }")
+rep("    if(A.banner) document.documentElement.style.setProperty('--heroimg','url('+A.banner+')');",
+    "    if(A.banner) document.documentElement.style.setProperty('--heroimg','url('+A.banner+')');\n"
+    "    if(A.icons){ let n=0; for(const k in A.icons){ if(UIC[k]&&UIC[k].__oss) continue; const u=A.icons[k]; if(k==='rift'){ const ri=new Image(); ri.onload=()=>{ const c=document.createElement('canvas'); c.width=c.height=192; c.getContext('2d').drawImage(ri,0,0,192,192); A3.rift=c; }; ri.src=u; continue; } const ii=new Image(); ii.onload=()=>{ try{ const c=document.createElement('canvas'); c.width=c.height=128; c.getContext('2d').drawImage(ii,0,0,128,128); c.__oss=1; UIC[k]=c; UICU[k]=u; if(++n===Object.keys(A.icons).length-1){ try{ if(G&&G.party&&G.party.length) hud(true); }catch(e){} try{ if(document.getElementById('qstb')&&typeof menu==='function'&&(!G||G.state!=='play')) menu(); }catch(e){} } }catch(e){} }; ii.src=u; }\n"
+    "      for(const st in PKS){ for(const [pk,ik] of [['coin','w_coin'],['chest','w_chest'],['banner','w_banner']]){ if(A.icons[ik]) PKS[st][pk]=im(A.icons[ik]); } } }")
 rep('window.__dc={camp:','window.__dc={tagTeam:(e,st)=>tagTeam(e,st),beltLv:()=>beltLv(),legacyHall:b=>legacyHall(b),towerWin0:()=>towerWin0(),get MUT(){return MUT},startWave:()=>startWave(),camp:')
 open(DST + '/story/index_tpl.html', 'w').write(s)
 print('template patched', len(s)//1024, 'KB')
